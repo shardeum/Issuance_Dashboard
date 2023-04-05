@@ -14,7 +14,6 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "chartjs-plugin-zoom": "^2.0.1",
     "daisyui": "^2.51.3",
-    "next": "^13.2.3",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-currency-input-field": "^3.6.10",
