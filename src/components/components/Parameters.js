@@ -1,5 +1,5 @@
 import React from "react";
-import RangeSlider from "./assets/range-slider.js";
+
 
 export default class AprCalc extends React.Component {
   state = {
@@ -446,7 +446,7 @@ If Standby ratio < 1 then set it to 1
 40 Gbs download / 6 Gbs upload">
           <label className="input-group">
             <input type="text" value={this.state.TPSPerNode} className="input input-bordered" onChange={this.onTPSPerNodeChange}/>
-            <span>Nodes</span>
+            <span>TPS</span>
           </label>
         </div>
       </div>
