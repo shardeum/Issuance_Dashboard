@@ -67,3 +67,12 @@ input[type="range"] {
 .chart-container {
     width: 100%;
 }
+
+
+.cursor-pointer {
+    width: max-content;
+}
+
+.customLabel {
+    padding-right: 10px;
+}
