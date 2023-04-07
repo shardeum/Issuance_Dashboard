@@ -28,7 +28,8 @@ export default class AprCalc extends React.Component {
     NetworkIncomePerDay: 0,
     NetworkDeltaPerDay: 0,
     MinNodes: 600,
-    CustomTXChecked: true
+    CustomTXChecked: false,
+    CustomDisabled: true
   };
 
   componentDidMount() {
@@ -45,7 +46,8 @@ export default class AprCalc extends React.Component {
 
     onCustomTXCheckedChange = (event) => {
     this.setState({
-      CustomTXChecked: ! this.state.CustomTXChecked
+      CustomTXChecked: ! this.state.CustomTXChecked,
+      CustomDisabled: ! this.state.CustomDisabled
     }, () => this.updateMonitoring());
   };
 
@@ -358,7 +360,7 @@ export default class AprCalc extends React.Component {
         </label>
         <div className="tooltip" data-tip="This is the actual average tx fees on the network. Typically will be more than the target Tx Fee set by FDAO. Maybe about 2x the target Tx Fee.">
           <label className="input-group">
-            <input type="text" value={this.state.AvgTxFee} className="input input-bordered" onChange={this.onAvgTxFeeChange}/>
+            <input type="text" value={this.state.AvgTxFee} className="input input-bordered" disabled={this.state.CustomDisabled} onChange={this.onAvgTxFeeChange}/>
             <span>USD</span>
 
           </label>
