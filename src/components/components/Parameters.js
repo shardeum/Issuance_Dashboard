@@ -1,6 +1,5 @@
 import React from "react";
 
-
 export default class AprCalc extends React.Component {
   state = {
     NodeTPS: 10,
@@ -40,35 +39,16 @@ export default class AprCalc extends React.Component {
     }, () => this.updateIncome());
   };
 
-
-    onCustomTXCheckedChange = (event) => {
+  onCustomTXCheckedChange = (event) => {
     this.setState({
-      CustomTXChecked: ! this.state.CustomTXChecked,
-      CustomDisabled: ! this.state.CustomDisabled
+      CustomTXChecked: !this.state.CustomTXChecked,
+      CustomDisabled: !this.state.CustomDisabled
     }, () => this.updateMonitoring());
-  };
-
-  onNodeTPSChange = (event) => {
-    this.setState({
-      NodeTPS: event.target.value
-    }, () => this.updateNetworkTPS());
-  };
-
-  onNodesChange = (event) => {
-    this.setState({
-      Nodes: event.target.value
-    }, () => this.updateNetworkTPS());
   };
 
   onNodesPerShardChange = (event) => {
     this.setState({
       NodesPerShard: event.target.value
-    }, () => this.updateNetworkTPS());
-  };
-
-  updateNetworkTPS = (event) => {
-    this.setState({
-      NetworkTPS: this.state.NodeTPS * this.state.Nodes / this.state.NodesPerShard
     }, () => this.updateMonitoring());
   };
 
@@ -108,15 +88,10 @@ export default class AprCalc extends React.Component {
   };
 
   updateMonitoring = (event) => {
-
-
     if (this.state.CustomTXChecked === true) {
-
-      console.log("true")
-
       if (this.state.NetworkTPS / this.state.TPSPerNode * this.state.NodesPerShard >= this.state.MinNodes) {
         this.setState({
-          NetworkTPS: this.state.NetworkTPS ,
+          NetworkTPS: this.state.NetworkTPS,
           AvgTxFee: this.state.AvgTxFee,
           ActiveNodes: this.state.NetworkTPS / this.state.TPSPerNode * this.state.NodesPerShard,
           StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
@@ -129,15 +104,10 @@ export default class AprCalc extends React.Component {
           StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
         }, () => this.updateIncome());
       }
-
-
-
     } else {
-
-        console.log("false")
       if (this.state.NetworkTPS / this.state.TPSPerNode * this.state.NodesPerShard >= this.state.MinNodes) {
         this.setState({
-          NetworkTPS: this.state.NetworkTPS ,
+          NetworkTPS: this.state.NetworkTPS,
           AvgTxFee: this.state.TXfees * 2,
           ActiveNodes: this.state.NetworkTPS / this.state.TPSPerNode * this.state.NodesPerShard,
           StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
@@ -150,11 +120,8 @@ export default class AprCalc extends React.Component {
           StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
         }, () => this.updateIncome());
       }
-
-
 
     }
-
 
   };
 
@@ -250,7 +217,6 @@ export default class AprCalc extends React.Component {
       <div className="flex-col">
         <h2>Network</h2>
 
-
         <div className="form-control min-h-200">
           <label className="label">
             <span className="label-text">Nodes per Shard</span>
@@ -274,8 +240,6 @@ export default class AprCalc extends React.Component {
             </label>
           </div>
         </div>
-
-
 
       </div>
     </div>
@@ -324,14 +288,11 @@ export default class AprCalc extends React.Component {
         </label>
         <div className="tooltip" data-tip="Same as SHM price, but set by FDAO into network. Updated about once a day. Used by the network to determine the SHM amount for target Tx Fee, Node reward and Stake amount.">
           <label className="input-group">
-            <input type="text" value={this.state.SHMValue} className="input input-bordered" disabled onChange={this.onStabilityFactorChange}/>
+            <input type="text" value={this.state.SHMValue} className="input input-bordered" disabled="disabled" onChange={this.onStabilityFactorChange}/>
 
           </label>
         </div>
       </div>
-
-
-
 
     </div>
 
@@ -362,14 +323,14 @@ export default class AprCalc extends React.Component {
 
           </label>
           <div className="form-control">
-    <label className="label cursor-pointer">
-      <span className="label-text customLabel">Use custom TX Fee     </span>
-      <input type="checkbox" checked={this.state.CustomTXChecked} className="checkbox checkbox-secondary" onChange={this.onCustomTXCheckedChange} />
+            <label className="label cursor-pointer">
+              <span className="label-text customLabel">Use custom TX Fee
+              </span>
+              <input type="checkbox" checked={this.state.CustomTXChecked} className="checkbox checkbox-secondary" onChange={this.onCustomTXCheckedChange}/>
 
-    </label>
-  </div>
+            </label>
+          </div>
         </div>
-
 
       </div>
 
@@ -402,17 +363,17 @@ export default class AprCalc extends React.Component {
     <div class="flex-1 w-50 apr-stats">
       <h2 className="pt-10">Continued...</h2>
 
-        <div className="form-control min-h-200">
-          <label className="label">
-            <span className="label-text">Market APY</span>
+      <div className="form-control min-h-200">
+        <label className="label">
+          <span className="label-text">Market APY</span>
+        </label>
+        <div className="tooltip" data-tip="This represents what current market APY is for other investments options. For example putting money into a CD or bond. Node operators will look at this and compare it to the APY they can earn by running a node. The number of nodes in standby will adjust so that the APY for running a node will get close to this market APY.">
+          <label className="input-group">
+            <input type="text" value={this.state.MarketAPY} className="input input-bordered" onChange={this.onMarketAPYChange}/>
+            <span>%</span>
           </label>
-          <div className="tooltip" data-tip="This represents what current market APY is for other investments options. For example putting money into a CD or bond. Node operators will look at this and compare it to the APY they can earn by running a node. The number of nodes in standby will adjust so that the APY for running a node will get close to this market APY.">
-            <label className="input-group">
-              <input type="text" value={this.state.MarketAPY} className="input input-bordered" onChange={this.onMarketAPYChange}/>
-              <span>%</span>
-            </label>
-          </div>
         </div>
+      </div>
 
       <div className="form-control min-h-200">
         <label className="label">
@@ -465,8 +426,6 @@ If Standby ratio < 1 then set it to 1
         </div>
       </div>
 
-
-
       <div className="form-control min-h-200">
         <label className="label">
           <span className="label-text">SHM Supply #</span>
@@ -480,8 +439,6 @@ SHM Supply = SHM Supply - SHM Delta">
           </label>
         </div>
       </div>
-
-
 
     </div>
     <div class="flex-1 min-w-full apr-stats">
