@@ -41,9 +41,6 @@ export default class AprCalc extends React.Component {
   };
 
 
-
-
-
     onCustomTXCheckedChange = (event) => {
     this.setState({
       CustomTXChecked: ! this.state.CustomTXChecked,
@@ -323,11 +320,11 @@ export default class AprCalc extends React.Component {
 
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">Stability Factor $/SHM</span>
+          <span className="label-text">Stable Price $/SHM</span>
         </label>
         <div className="tooltip" data-tip="Same as SHM price, but set by FDAO into network. Updated about once a day. Used by the network to determine the SHM amount for target Tx Fee, Node reward and Stake amount.">
           <label className="input-group">
-            <input type="text" value={this.state.StabilityFactor} className="input input-bordered" onChange={this.onStabilityFactorChange}/>
+            <input type="text" value={this.state.SHMValue} className="input input-bordered" disabled onChange={this.onStabilityFactorChange}/>
 
           </label>
         </div>
@@ -405,19 +402,32 @@ export default class AprCalc extends React.Component {
     <div class="flex-1 w-50 apr-stats">
       <h2 className="pt-10">Continued...</h2>
 
+        <div className="form-control min-h-200">
+          <label className="label">
+            <span className="label-text">Market APY</span>
+          </label>
+          <div className="tooltip" data-tip="This represents what current market APY is for other investments options. For example putting money into a CD or bond. Node operators will look at this and compare it to the APY they can earn by running a node. The number of nodes in standby will adjust so that the APY for running a node will get close to this market APY.">
+            <label className="input-group">
+              <input type="text" value={this.state.MarketAPY} className="input input-bordered" onChange={this.onMarketAPYChange}/>
+              <span>%</span>
+            </label>
+          </div>
+        </div>
+
       <div className="form-control min-h-200">
         <label className="label">
           <span className="label-text">Standby Ratio #</span>
         </label>
         <div className="tooltip" data-tip="Standby  / Active
 Increasing the node reward will increase this.
-Will probably increase until the APY is about 10%.
+Will probably increase until the APY is close to Market APY
 
 Standby ratio = Node reward x 24 /
-                            (10 x Stake amount / 365 x 100 +
+                            (Market APY x Stake amount / 365 x 100 +
                                  Server rent x 24)
 
 If Standby ratio < 1 then set it to 1
+
 ">
           <label className="input-group">
             <input type="text" value={this.state.StandbyRatio.toFixed(2)} className="input input-bordered" disabled="disabled" onChange={this.onStandbyRatioChange}/>
@@ -447,12 +457,7 @@ If Standby ratio < 1 then set it to 1
         <label className="label">
           <span className="label-text">Node TPS #/s</span>
         </label>
-        <div className="tooltip" data-tip="On Linode.com $0.20/hr gets
-8 core
-16 GB RAM
-320 GB SSD
-6 TB/mo transfer
-40 Gbs download / 6 Gbs upload">
+        <div className="tooltip" data-tip="Cool TPS per node; about 20% of Max TPS; node can easily handle this TPS.">
           <label className="input-group">
             <input type="text" value={this.state.TPSPerNode} className="input input-bordered" onChange={this.onTPSPerNodeChange}/>
             <span>TPS</span>
@@ -460,17 +465,7 @@ If Standby ratio < 1 then set it to 1
         </div>
       </div>
 
-      <div className="form-control min-h-200">
-        <label className="label">
-          <span className="label-text">Market APY</span>
-        </label>
-        <div className="tooltip" data-tip="This represents what current market APY is for other investments options. For example putting money into a CD or bond. Node operators will look at this and compare it to the APY they can earn by running a node. The number of nodes in standby will adjust so that the APY for running a node will get close to this market APY.">
-          <label className="input-group">
-            <input type="text" value={this.state.MarketAPY} className="input input-bordered" onChange={this.onMarketAPYChange}/>
-            <span>%</span>
-          </label>
-        </div>
-      </div>
+
 
       <div className="form-control min-h-200">
         <label className="label">
