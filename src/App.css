@@ -85,7 +85,7 @@ input[type="range"] {
 
 .holder {
 
-  height: calc(100% - 50px);
+  height: calc(100% - 170px);
   width: 100%;
 }
 

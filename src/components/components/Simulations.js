@@ -52,22 +52,30 @@ export default class Simulations extends React.Component {
 
    onDrawChart = (event) => {
 
-     console.log("drawing chart")
+
       // the amount of data points for price and tx volume may be different.
       // we assume the most current data point is for the same day.
       // select only the part where both have data points
       const minData = Math.min(this.state.priceData.length, this.state.txvolData.length)
-      let priceData = this.state.priceData.splice(0-minData)
-      let txvolData = this.state.txvolData.splice(0-minData)
 
-      if (priceData.length === 0) {
+
+
+      if (this.state.priceData.length === 0) {
+
           alert('Please upload a valid price file.');
           return;
       }
-      if (txvolData.length === 0) {
+      if (this.state.txvolData.length === 0) {
+
           alert('Please upload a valid tx volume file.');
           return;
       }
+
+
+
+          let priceData = [...this.state.priceData].splice(0-minData)
+          let txvolData = [...this.state.txvolData].splice(0-minData)
+
 
 
       const canvas = document.getElementById('simChart');
@@ -89,7 +97,27 @@ export default class Simulations extends React.Component {
           return {x: index, y: Math.max(this.state.MinNodes, value/86400/this.state.TPSPerNode*this.state.NodesPerShard)};
       });
 
+      const netrevDataset = txvolData.map((value, index) => {
+          return {x: index, y: value*this.state.AvgTxFee};
+      });
+      const netexpDataset = activeDataset.map((value, index) => {
+          return {x: index, y: value.y*this.state.NodeRewardPerHour*24};
+      });
+      const netincDataset = netrevDataset.map((value, index) => {
+          return {x: index, y: value.y - netexpDataset[index].y};
+      });
+      const shmdelDataset = netincDataset.map((value, index) => {
+          return {x: index, y: value.y / priceDataset[index].y};
+      });
+      let shmsup = 0
+      const shmsupDataset = shmdelDataset.map((value, index) => {
+          shmsup -= value.y
+          return {x: index, y: shmsup};
+      });
+
+
       document.querySelector(".chartBox").style.display = "block";
+
 
 
       window.myChart = new Chart(ctx, {
@@ -116,6 +144,15 @@ export default class Simulations extends React.Component {
                         borderColor: 'rgb(200, 99, 200)',
                         tension: 1,
                         yAxisID: 'y-active'
+                    },
+
+
+                    {
+                        label: 'Supply Data',
+                        data: shmsupDataset,
+                        borderColor: 'rgb(132, 99, 255)',
+                        tension: 1,
+                        yAxisID: 'y-shmsup'
                     }
               ]
           },
@@ -124,9 +161,20 @@ export default class Simulations extends React.Component {
             maintainAspectRatio: true,
             aspectRatio: 2,
             plugins: {
+              title: {
+                display: true,
+                text: "Node Reward Simulation"
+              },
+              legend: {
+                display: true
+              },
+              colors: {
+                enabled: true
+              }
             },
               scales: {
                   x: {
+                        display: true,
                       type: 'linear',
                       title: {
                           display: true,
@@ -136,11 +184,15 @@ export default class Simulations extends React.Component {
                       max: 2000,
                       ticks: {
                           callback: (value, index, values) => {
-                              return value.toFixed(2);
+                              return value.toFixed(0);
                           }
                       }
                   },
+                'y-price': {
+                      display: false,
+                  },
                   'y-txvol': {
+                    display: false,
                       type: 'logarithmic',
                       position: 'right',
                       title: {
@@ -151,11 +203,23 @@ export default class Simulations extends React.Component {
                       max: Math.max(...txvolData),
                   },
 
-                  'y-active': {
+                  'y-shmsup': {
+                    display: true,
                       type: 'linear',
                       position: 'left',
                       title: {
-                          display: false,
+                          display: true,
+                          text: 'SHM Supply'
+                      },
+                      min: 0,
+                    
+                  },
+                  'y-active': {
+                    display: false ,
+                      type: 'linear',
+                      position: 'left',
+                      title: {
+                          display: true,
                           text: 'Active Nodes'
                       },
                       min: Math.min.apply(null, activeDataset.map(function(a){return a.y;})),
@@ -168,6 +232,14 @@ export default class Simulations extends React.Component {
               }
           }
       });
+
+
+
+
+
+
+
+
   };
 
 
@@ -510,6 +582,55 @@ export default class Simulations extends React.Component {
             <div className="chartCard">
                   <div className="chartBox">
                     <button class="btn secondary" onClick={this.onToggleChart}>Toogle View</button>
+                      <div class="flex-1 min-w-full apr-stats items-center">
+                        <div className="stats shadow">
+                          <div className="stat">
+                            <div className="stat-title">Revenue $/day</div>
+                            <div className="stat-value">
+                              {"$" + this.state.RevenuePerDay.toFixed(2)}
+                            </div>
+                            <div className="stat-desc">
+                              Node reward * 24 / Standby ratio
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="stats shadow">
+                          <div className="stat">
+                            <div className="stat-title">Expense $/day</div>
+                            <div className="stat-value">
+                              {"$" + this.state.ExpensePerDay.toFixed(2)}
+                            </div>
+                            <div className="stat-desc">
+                              Expense $/day
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="stats shadow">
+                          <div className="stat">
+                            <div className="stat-title">Income $/day</div>
+                            <div className="stat-value">
+                              {"$" + this.state.IncomePerDay.toFixed(2)}
+                            </div>
+                            <div className="stat-desc">
+                              Income = Revenue - Expense
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="stats shadow">
+                          <div className="stat">
+                            <div className="stat-title">APY %/year</div>
+                            <div className="stat-value">
+                              {this.state.APYPerYear.toFixed(2) + "%"}
+                            </div>
+                            <div className="stat-desc">
+                              100 * Income * 365 / Stake amount
+                            </div>
+                          </div>
+                        </div>
+                          </div>
                     <div className="holder">
                     <span id="info" />
                     <canvas id="simChart" />
@@ -517,6 +638,7 @@ export default class Simulations extends React.Component {
                         <button class="btn secondary" onClick={this.onDownloadPDF}>Download PDF</button>
                   </div>
                 </div>
+
 
 
 
@@ -664,6 +786,21 @@ export default class Simulations extends React.Component {
           </div>
         </div>
 
+      </div>
+
+
+      <div className="form-control min-h-200">
+        <label className="label">
+          <span className="label-text">SHM Supply #</span>
+        </label>
+        <div className="tooltip" data-tip="Supply is used to guide decisions on the parameters the FDAO sets.
+Must keep this below 259080000 SHM. It can go up and down based on Network Income.
+SHM Supply = SHM Supply - SHM Delta">
+          <label className="input-group">
+            <input type="text" value={this.state.SHMSupply} className="input input-bordered" disabled="disabled" onChange={this.onSHMSupplyChange}/>
+            <span>SHM</span>
+          </label>
+        </div>
       </div>
 
 
