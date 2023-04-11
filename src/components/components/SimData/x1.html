@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sine Wave Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Sine Wave Generator</h1>
+    <label for="frequency">Frequency:</label>
+    <input type="number" id="frequency" name="frequency" value="1" step="0.1" min="0">
+    <label for="amplitude">Amplitude:</label>
+    <input type="number" id="amplitude" name="amplitude" value="1" step="0.1">
+    <button onclick="drawSineWave()">Draw</button>
+    <canvas id="sineWaveChart"></canvas>
+
+    <script>
+        const drawSineWave = () => {
+            const frequency = parseFloat(document.getElementById('frequency').value);
+            const amplitude = parseFloat(document.getElementById('amplitude').value);
+            const canvas = document.getElementById('sineWaveChart');
+            const ctx = canvas.getContext('2d');
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            const dataPoints = [];
+            for (let x = 0; x <= 2 * Math.PI; x += 0.01) {
+                const y = amplitude * Math.sin(frequency * x);
+                dataPoints.push({x, y});
+            }
+
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Sine Wave',
+                        data: dataPoints,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'X'
+                            },
+                            min: 0,
+                            max: 2 * Math.PI,
+                            ticks: {
+                                callback: (value, index, values) => {
+                                    return value.toFixed(2);
+                                }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Y'
+                            },
+                            min: -amplitude,
+                            max: amplitude
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
+

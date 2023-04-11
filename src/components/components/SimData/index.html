@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHM Supply Simulation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>SHM Supply Simulation</h1>
+    <label for="txfee">Tx Fee:</label>
+    <input type="number" id="txfee" name="txfee" value="0.01" min="0" size=7 onchange="update()">
+    <label for="reward">Reward:</label>
+    <input type="number" id="reward" name="reward" value="1" step="0.1" size=7 onchange="update()">
+    <label for="stake">Stake:</label>
+    <input type="number" id="stake" name="stake" value="1000" step="0.1" size=7 onchange="update()">
+    <label for="nps">Nodes/Shard:</label>
+    <input type="number" id="nps" name="nps" value="120" step="0.1" size=7 onchange="update()">
+    <label for="minnodes">Min Nodes:</label>
+    <input type="number" id="minnodes" name="minnodes" value="600" step="0.1" size=7 onchange="update()">
+    <br>
+    <label for="priceFile">SHM Daily Avg Price:</label>
+    <input type="number" id="price" name="price" value="1.20" min="0" size=7 onchange="update()">
+    <input type="file" id="priceFile" name="priceFile" accept=".txt">
+    <label for="txvolFile">Daily Tx Volume:</label>
+    <input type="number" id="txvol" name="txvol" value="86400" min="0" size=10 onchange="update()">
+    <input type="file" id="txvolFile" name="txvolFile" accept=".txt">
+    <br>
+    <label for="rent">Server Rent:</label>
+    <input type="number" id="rent" name="rent" value="0.20" min="0" size=7 onchange="update()">
+    <label for="nodetps">Node TPS:</label>
+    <input type="number" id="nodetps" name="nodetps" value="2" min="0" size=7 onchange="update()">
+    <label for="marketapy">Market APY:</label>
+    <input type="number" id="marketapy" name="marketapy" value="10" min="0" size=7 onchange="update()">
+    <br>
+    <label for="avgtxfee">Avg Tx Fee:</label>
+    <input type="number" id="avgtxfee" name="avgtxfee" value="0.02" min="0" size=7 disabled>
+    <label for="actnodes">Active Nodes:</label>
+    <input type="number" id="actnodes" name="actnodes" value="600" min="0" size=7 disabled>
+    <label for="staratio">Standby Ratio:</label>
+    <input type="number" id="staratio" name="staratio" value="2" min="0" size=7 disabled>
+    <label for="nodeinc">Daily Node Income:</label>
+    <input type="number" id="nodeinc" name="nodeinc" value="5" min="0" size=7 disabled>
+    <label for="netinc">Daily Network Income:</label>
+    <input type="number" id="netinc" name="netinc" value="2000" min="0" size=7 disabled>
+    <label for="issue">Daily SHM Issued:</label>
+    <input type="number" id="issue" name="issue" value="2000" min="0" size=7 disabled>
+    <br>
+    <button onclick="drawChart()">Draw</button>
+    <span style="display: inline-block; width:150px"></span>
+    <span id="info"></span>
+    <br>
+    <canvas id="simChart"></canvas>
+
+    <script>
+        let priceData = [];
+        let txvolData = [];
+
+        document.getElementById('priceFile').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const lines = e.target.result.split('\n');
+                priceData = lines.map(line => parseFloat(line)).filter(value => !isNaN(value));
+            };
+
+            reader.readAsText(file);
+        });
+
+        document.getElementById('txvolFile').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const lines = e.target.result.split('\n');
+                txvolData = lines.map(line => parseFloat(line)).filter(value => !isNaN(value));
+            };
+
+            reader.readAsText(file);
+        });
+
+        const update = () => {
+            const txfee = parseFloat(document.getElementById('txfee').value);
+            const reward = parseFloat(document.getElementById('reward').value);
+            const stake = parseFloat(document.getElementById('stake').value);
+            const price = parseFloat(document.getElementById('price').value);
+            const txvol = parseFloat(document.getElementById('txvol').value);
+            const nps = parseFloat(document.getElementById('nps').value); // nodes per shard
+            const minnodes = parseFloat(document.getElementById('minnodes').value);
+            const rent = parseFloat(document.getElementById('rent').value); // server rent
+            const nodetps = parseFloat(document.getElementById('nodetps').value);
+            const marketapy = parseFloat(document.getElementById('marketapy').value);
+
+            let actnodes = Math.max(minnodes, txvol/86400/nodetps*nps);
+            document.getElementById('actnodes').value = actnodes
+            let avgtxfee = 2*txfee
+            document.getElementById('avgtxfee').value = avgtxfee
+            let staratio = reward*24/(marketapy*stake/36500 + rent*24) - 1;
+            document.getElementById('staratio').value = staratio
+            document.getElementById('nodeinc').value = Math.round(100* (reward*24/staratio - rent*24))/100
+            let netinc = Math.round(100* (avgtxfee*txvol - actnodes*reward*24))/100
+            document.getElementById('netinc').value = netinc
+            document.getElementById('issue').value = netinc/price
+        };
+
+        const drawChart = () => {
+            update()
+
+            // the amount of data points for price and tx volume may be different.
+            // we assume the most current data point is for the same day.
+            // select only the part where both have data points
+            const minData = Math.min(priceData.length, txvolData.length)
+            priceData = priceData.splice(0-minData)
+            txvolData = txvolData.splice(0-minData)
+
+            if (priceData.length === 0) {
+                alert('Please upload a valid price file.');
+                return;
+            }
+            if (txvolData.length === 0) {
+                alert('Please upload a valid tx volume file.');
+                return;
+            }
+
+            const txfee = parseFloat(document.getElementById('txfee').value);
+            const reward = parseFloat(document.getElementById('reward').value);
+            const stake = parseFloat(document.getElementById('stake').value);
+            const price = parseFloat(document.getElementById('price').value);
+            const nps = parseFloat(document.getElementById('nps').value); // nodes per shard
+            const minnodes = parseFloat(document.getElementById('minnodes').value);
+            const avgtxfee = parseFloat(document.getElementById('avgtxfee').value);
+            const rent = parseFloat(document.getElementById('rent').value); // server rent
+            const nodetps = parseFloat(document.getElementById('nodetps').value);
+            const marketapy = parseFloat(document.getElementById('marketapy').value);
+
+            let info = document.getElementById('info');
+            const canvas = document.getElementById('simChart');
+            const ctx = canvas.getContext('2d');
+
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            const priceDataset = priceData.map((value, index) => {
+                return {x: index, y: value};
+            });
+            const txvolDataset = txvolData.map((value, index) => {
+                return {x: index, y: value};
+            });
+            const activeDataset = txvolData.map((value, index) => {
+                return {x: index, y: Math.max(minnodes, value/86400/nodetps*nps)};
+            });
+            const sbr = reward*24/(marketapy*stake/36500 + rent*24) - 1
+            const noderev = Math.round(100* reward*24/(sbr+1))/100
+            const nodeexp = Math.round(100* rent*24)/100
+            const nodeinc = Math.round(100* (noderev - nodeexp))/100
+            const nodeapy = Math.round(100*100*nodeinc*365/stake)/100
+            const netrevDataset = txvolData.map((value, index) => {
+                return {x: index, y: value*avgtxfee};
+            });
+            const netexpDataset = activeDataset.map((value, index) => {
+                return {x: index, y: value.y*reward*24};
+            });
+            const netincDataset = netrevDataset.map((value, index) => {
+                return {x: index, y: value.y - netexpDataset[index].y};
+            });
+            const shmdelDataset = netincDataset.map((value, index) => {
+                return {x: index, y: value.y / priceDataset[index].y};
+            });
+            let shmsup = 0
+            const shmsupDataset = shmdelDataset.map((value, index) => {
+                shmsup -= value.y
+                return {x: index, y: shmsup};
+            });
+
+            info.innerHTML = `NodeRev: $${noderev} &nbsp; NodeExp: $${nodeexp} &nbsp; NodeInc: $${nodeinc} &nbsp; NodeAPY: ${nodeapy}% `
+
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Tx Volume',
+                            data: txvolDataset,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 1,
+                            yAxisID: 'y-txvol'
+                        },
+                        {
+                            label: 'Price Data',
+                            data: priceDataset,
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 1,
+                            yAxisID: 'y-price'
+                        },
+                        {
+                            label: 'Active Nodes',
+                            data: activeDataset,
+                            borderColor: 'rgb(200, 99, 200)',
+                            tension: 1,
+                            yAxisID: 'y-active'
+                        },
+                        {
+                            label: 'Supply Data',
+                            data: shmsupDataset,
+                            borderColor: 'rgb(132, 99, 255)',
+                            tension: 1,
+                            yAxisID: 'y-shmsup'
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'X'
+                            },
+                            min: 0,
+                            max: 2000,
+                            ticks: {
+                                callback: (value, index, values) => {
+                                    return value.toFixed(2);
+                                }
+                            }
+                        },
+                        'y-txvol': {
+                            type: 'logarithmic',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Tx Volume'
+                            },
+                            min: 0,
+                            max: Math.max(...txvolData),
+                        },
+                        'y-price': {
+                            type: 'logarithmic',
+                            position: 'right',
+                            title: {
+                                display: false,
+                                text: 'Price Data'
+                            },
+                            min: 0,
+                            max: Math.max(...priceData),
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        'y-active': {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: false,
+                                text: 'Active Nodes'
+                            },
+                            min: Math.min.apply(null, activeDataset.map(function(a){return a.y;})),
+                            max: Math.max.apply(null, activeDataset.map(function(a){return a.y;})),
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        'y-shmsup': {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: false,
+                                text: 'Supply Data'
+                            },
+                            min: Math.min.apply(null, shmsupDataset.map(function(a){return a.y;})),
+                            max: Math.max.apply(null, shmsupDataset.map(function(a){return a.y;})),
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
+

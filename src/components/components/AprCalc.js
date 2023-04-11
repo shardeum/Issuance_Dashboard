@@ -9,7 +9,7 @@ export default class AprCalc extends React.Component {
     TotalNetworkSize: 2400,
     ValidatorCost: 100,
     SHMValue: 0.85,
-    ASRatio: 14,
+    ASRatio: 1,
     Stake: 100,
     ApproxTimeValidating: 50,
     RewardDay: 4.17,
@@ -131,7 +131,7 @@ export default class AprCalc extends React.Component {
           </div>
         </div>
 
-        <RangeSlider title={"Active:Standby Validator Ratio"} desc={" A:S Ratio:"} max={20} start={1} onSliderChange={this.onRatioChange}/>
+        <RangeSlider title={"Standby:Active Validator Ratio"} desc={" S:A Ratio:"} max={20} start={1} onSliderChange={this.onRatioChange}/>
 
         <RangeSlider title={"Total Node Running Cost(monthly)"} desc={" USD"} max={1000} start={100} onSliderChange={this.onValidatorCostChange}/>
 
