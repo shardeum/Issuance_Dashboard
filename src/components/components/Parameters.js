@@ -2,7 +2,7 @@ import React from "react";
 
 export default class AprCalc extends React.Component {
   state = {
-    NodeTPS: 10,
+    NodeTPS: 20,
     Nodes: 600,
     NodesPerShard: 120,
     NetworkTPS: 50,
@@ -35,7 +35,7 @@ export default class AprCalc extends React.Component {
     this.setState({
       AvgTxFee: this.state.TXfees * 2,
       ActiveNodes: this.state.NetworkTPS / this.state.TPSPerNode * this.state.NodesPerShard,
-      StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
+      StandbyRatio: Math.max(0, this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1)
     }, () => this.updateIncome());
   };
 
@@ -94,14 +94,14 @@ export default class AprCalc extends React.Component {
           NetworkTPS: this.state.NetworkTPS,
           AvgTxFee: this.state.AvgTxFee,
           ActiveNodes: this.state.NetworkTPS / this.state.TPSPerNode * this.state.NodesPerShard,
-          StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
+          StandbyRatio: Math.max(0, this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1)
         }, () => this.updateIncome());
       } else {
         this.setState({
           NetworkTPS: this.state.NetworkTPS,
           AvgTxFee: this.state.AvgTxFee,
           ActiveNodes: this.state.MinNodes,
-          StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
+          StandbyRatio: Math.max(0, this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1)
         }, () => this.updateIncome());
       }
     } else {
@@ -110,14 +110,14 @@ export default class AprCalc extends React.Component {
           NetworkTPS: this.state.NetworkTPS,
           AvgTxFee: this.state.TXfees * 2,
           ActiveNodes: this.state.NetworkTPS / this.state.TPSPerNode * this.state.NodesPerShard,
-          StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
+            StandbyRatio: Math.max(0, this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1)
         }, () => this.updateIncome());
       } else {
         this.setState({
           NetworkTPS: this.state.NetworkTPS,
           AvgTxFee: this.state.TXfees * 2,
           ActiveNodes: this.state.MinNodes,
-          StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
+            StandbyRatio: Math.max(0, this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1)
         }, () => this.updateIncome());
       }
 
@@ -153,11 +153,7 @@ export default class AprCalc extends React.Component {
 
   };
 
-  onStandbyRatioChange = (event) => {
-    this.setState({
-      StandbyRatio: event.target.value
-    }, () => this.updateMonitoring());
-  };
+
 
   onSeverRentPerHourChange = (event) => {
     this.setState({
@@ -194,7 +190,6 @@ export default class AprCalc extends React.Component {
       NetworkRevenuePerDay: this.state.NetworkTPS * 86400 * this.state.AvgTxFee,
       NetworkExpensePerDay: this.state.ActiveNodes * this.state.NodeRewardPerHour * 24,
       NetworkDeltaPerDay: this.state.NetworkIncomePerDay / this.state.StabilityFactor,
-      StandbyRatio: this.state.NodeRewardPerHour * 24 / (this.state.MarketAPY * this.state.Stake / 36500 + this.state.SeverRentPerHour * 24) - 1
     }, () => this.updateIncomeDay());
   };
 
@@ -213,7 +208,7 @@ export default class AprCalc extends React.Component {
   };
 
   render() {
-    return (<> < div class = "flex flex-wrap" > <div class="flex-1 w-50">
+    return (<> < div class = "flex flex-wrap" > <div class="flex-1 w-50 min-w-[50%]">
       <div className="flex-col">
         <h2>Network</h2>
 
@@ -243,7 +238,7 @@ export default class AprCalc extends React.Component {
 
       </div>
     </div>
-    <div class="flex-1 w-50">
+    <div class="flex-1 w-50 min-w-[50%]">
       <h2>FDAO Controls</h2>
 
       <div className="form-control min-h-200">
@@ -296,15 +291,14 @@ export default class AprCalc extends React.Component {
 
     </div>
 
-    <div class="flex-1 w-50 apr-stats">
+    <div class="flex-1 w-50 min-w-[50%] apr-stats">
       <h2 className="pt-10">FDAO Monitoring</h2>
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">SHM Value $</span>
+          <span className="label-text">SHM Price $</span>
         </label>
         <div className="tooltip" data-tip="FDAO uses this to set the Stability Factor. Stability factor changed about once a day.">
           <label className="input-group">
-            <span>Price</span>
             <input type="text" value={this.state.SHMValue} className="input input-bordered" onChange={this.onSHMValueChange}/>
             <span>USD</span>
           </label>
@@ -360,7 +354,7 @@ export default class AprCalc extends React.Component {
 
     </div>
 
-    <div class="flex-1 w-50 apr-stats">
+    <div class="flex-1 w-50 min-w-[50%] apr-stats">
       <h2 className="pt-10">Continued...</h2>
 
       <div className="form-control min-h-200">
