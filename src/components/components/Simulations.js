@@ -18,15 +18,15 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 export default class Simulations extends React.Component {
   state = {
-    NodeTPS: 20,
+    NodeTPS: 2,
     Nodes: 600,
     NodesPerShard: 120,
-    NetworkTPS: 50,
+    NetworkTPS: 20,
     TXfees: 0.01,
-    NodeRewardPerHour: 0.5,
+    NodeRewardPerHour: 1,
     Stake: 1000,
-    StabilityFactor: 1.2,
-    SHMValue: 2,
+    StabilityFactor: 1,
+    SHMValue: 1,
     AvgTxFee: 0,
     ActiveNodes: 0,
     SeverRentPerHour: 0.2,
@@ -212,7 +212,7 @@ export default class Simulations extends React.Component {
                           text: 'SHM Supply'
                       },
                       min: 0,
-                      max: Math.max(...shmsupDataset),
+
                   },
                   'y-active': {
                     display: false ,
@@ -380,7 +380,8 @@ export default class Simulations extends React.Component {
 
   onSHMValueChange = (event) => {
     this.setState({
-      SHMValue: event.target.value
+      SHMValue: event.target.value,
+      StabilityFactor: event.target.value
     }, () => this.updateMonitoring());
 
   };
