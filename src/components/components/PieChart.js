@@ -5,7 +5,6 @@ import { Pie } from "react-chartjs-2";
 function PieChart({chartData, plugins}) {
   return (
     <div className="chart-container">
-      <h2 style={{ textAlign: "center" }}>Day 1 Distribution</h2>
       <Pie
         data={chartData}
         plugins={plugins}
@@ -14,7 +13,7 @@ function PieChart({chartData, plugins}) {
 
             title: {
               display: true,
-              text: "SHM Distribution Percentage Excluding Vesting"
+              text: "SHM Distribution Percentage"
             },
             datalabels: {
                 display: true,

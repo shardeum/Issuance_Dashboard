@@ -3,9 +3,7 @@ import React from "react";
 import {Line} from "react-chartjs-2";
 function LineChart({chartData}) {
   return (<div className="chart-container">
-    <h2 style={{
-        textAlign: "center"
-      }}>Issued vs Liquid SHM</h2>
+
     <Line data={chartData} options={{
 
         scales: {
@@ -24,7 +22,7 @@ function LineChart({chartData}) {
             title: {
               color: 'White',
               display: true,
-              text: 'Day',
+              text: 'Days since genesis',
               border: {
                 color: 'white'
               }
@@ -47,7 +45,7 @@ function LineChart({chartData}) {
         plugins: {
           title: {
             display: true,
-            text: "Vesting Schedule Excluding Node Reward"
+            text: "SHM Vesting Schedule"
           },
           legend: {
             display: true

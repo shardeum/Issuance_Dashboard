@@ -26,11 +26,7 @@ Chart.defaults.elements.point.radius = 2;
 export default function Emissions() {
   const [chartData] = useState({
     labels: EmmisionsData.map((data) => data.Day),
-    datasets: [
-      {
-        label: "Issued SHM",
-        data: EmmisionsData.map((data) => data.Issuded_SHM)
-      }, {
+    datasets: [ {
         label: "Liquid SHM",
         data: EmmisionsData.map((data) => data.TotalLiquid_SHM)
       }, {
@@ -45,10 +41,6 @@ export default function Emissions() {
       }, {
         label: "Sale",
         data: EmmisionsData.map((data) => data.Sale_Total)
-      }, {
-
-        label: "Node Reward",
-        data: EmmisionsData.map((data) => data.Node_Rewards_Day)
       }
     ]
   });
