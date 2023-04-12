@@ -72,17 +72,10 @@ export default function Emissions() {
       {
         label: "Issued SHM - Tokens",
         data: DistributionData.map((data) => data.SHM),
-        percentage: ['foo', 'bar']
 
       },
-
     ]
-
-
   });
-
-
-
 
   return (<div className="App">
     <h2 className="text-lg font-bold">Shardeum Distribution</h2>
