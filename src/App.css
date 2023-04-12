@@ -15,6 +15,19 @@ a {
   text-decoration: none;
 }
 
+a.nav-link {
+    min-width: 120px;
+    text-align: center;
+}
+
+
+a.active {
+
+border-bottom: white solid 2px;
+
+
+}
+
 * {
   box-sizing: border-box;
 }
@@ -119,5 +132,8 @@ body::-webkit-scrollbar {
 }
 
 .flex-1.chart {
-    width: -webkit-fill-available;
+  width: 100%;
+     width: -moz-available;          /* WebKit-based browsers will ignore this. */
+     width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+     width: fill-available;
 }

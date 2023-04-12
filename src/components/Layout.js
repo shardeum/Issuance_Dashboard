@@ -1,11 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {Helmet} from "react-helmet";
 import Assumptions from './pages/Assumptions';
 import Apr from './pages/Apr';
 import Emissions from './pages/Emissions';
 import Simulations from './pages/Simulations';
 import Parameters from './pages/Parameters';
+import { NavLink } from "react-router-dom";
 
 export default function Layout({children}) {
   return (
@@ -31,21 +32,26 @@ export default function Layout({children}) {
 
             <ul className="flex-grow flex mb-3 mt-10 border-b-2 border-b-gray-500 h-10 items-stretch">
 
-                <li className={"border-b-2 border-b-white px-5 -mb-0.5 text-white px-5"}>
-                  <Link to={'/Assumptions'} className="nav-link"> Assumptions </Link></li>
 
-                <li className={"border-b-2 border-b-white px-5 -mb-0.5 text-white px-5"}>
-                    <Link to={'/Apr'} className="nav-link"> APR </Link></li>
-
-                <li className={"border-b-2 border-b-white px-5 -mb-0.5 text-white px-5"}>
-                      <Link to={'/Emissions'} className="nav-link"> Emissions (vesting) </Link></li>
+                  <NavLink to={'/Assumptions'} className={({ isActive, isPending }) =>
+    isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>Assumptions</NavLink>
 
 
-                        <li className={"border-b-2 border-b-white px-5 -mb-0.5 text-white px-5"}>
-                        <Link to={'/Parameters'} className="nav-link"> Parameters </Link></li>
+                    <NavLink to={'/Apr'} className={({ isActive, isPending }) =>
+      isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>APR</NavLink>
 
-                <li className={"border-b-2 border-b-white px-5 -mb-0.5 text-white px-5"}>
-                <Link to={'/Simulations'} className="nav-link"> Simulations </Link></li>
+
+                      <NavLink to={'/Emissions'} className={({ isActive, isPending }) =>
+        isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>Emissions</NavLink>
+
+
+
+                        <NavLink to={'/Parameters'} className={({ isActive, isPending }) =>
+          isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>Parameters</NavLink>
+
+
+                <NavLink to={'/Simulations'} className={({ isActive, isPending }) =>
+  isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>Simulations</NavLink>
 
 
 
