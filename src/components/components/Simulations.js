@@ -1,4 +1,3 @@
-
 import React from "react";
 import { jsPDF } from "jspdf";
 import Chart from "chart.js/auto";
@@ -12,6 +11,15 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+
+import EthereumPrice from ".././components/SimData/eth-price.txt";
+import EthereumTX from ".././components/SimData/eth-tx-vol.txt";
+import AlgorandPrice from ".././components/SimData/algo-price.txt";
+import AlgorandTX from ".././components/SimData/algo-tx-vol.txt";
+import BSCPrice from ".././components/SimData/bnb-price.txt";
+import BSCTX from ".././components/SimData/bsc-tx-vol.txt";
+import PolygonPrice from ".././components/SimData/matic-price.txt";
+import PolygonTX from ".././components/SimData/poly-tx-vol.txt";
 
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -57,7 +65,7 @@ export default class Simulations extends React.Component {
     this.setState({
       CustomPriceFileChecked: !this.state.CustomPriceFileChecked,
       CustomPriceFileDisabled: !this.state.CustomPriceFileDisabled
-    }, () => this.updateMonitoring());
+    });
     document.querySelector("#priceFile").classList.toggle('FileShown');
       document.querySelector("#priceFile").classList.toggle('FileHidden');
       document.querySelector(".FileSelect").selectedIndex = 0;
@@ -67,7 +75,7 @@ export default class Simulations extends React.Component {
     this.setState({
       CustomTXFileChecked: !this.state.CustomTXFileChecked,
       CustomTXFileDisabled: !this.state.CustomTXFileDisabled
-    }, () => this.updateMonitoring());
+    });
     document.querySelector("#txvolData").classList.toggle('FileShown');
       document.querySelector("#txvolData").classList.toggle('FileHidden');
             document.querySelector(".TXSelect").selectedIndex = 0;
@@ -283,6 +291,157 @@ export default class Simulations extends React.Component {
         };
 
         reader.readAsText(file);
+
+
+  }
+
+
+  onPriceFileSelect = (event) => {
+
+
+    async function getFile(fileURL){
+        let fileContent = await fetch(fileURL);
+        fileContent = await  fileContent.text();
+        return fileContent;
+    }
+
+    if (document.querySelector(".FileSelect").value === "Ethereum") {
+
+      // Passing file url
+      getFile(EthereumPrice).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+    } else if (document.querySelector(".FileSelect").value === "Algorand") {
+
+      getFile(AlgorandPrice).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+    } else if (document.querySelector(".FileSelect").value === "BNB Smart Chain") {
+
+      getFile(BSCPrice).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+    } else if (document.querySelector(".FileSelect").value === "Matic") {
+
+      getFile(PolygonPrice).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+
+
+
+    }
+
+
+
+
+
+
+  }
+
+
+
+  onTXFileSelect = (event) => {
+
+
+    async function getFile(fileURL){
+        let fileContent = await fetch(fileURL);
+        fileContent = await  fileContent.text();
+        return fileContent;
+    }
+
+    if (document.querySelector(".TXSelect").value === "Ethereum") {
+
+      // Passing file url
+      getFile(EthereumTX).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+    } else if (document.querySelector(".TXSelect").value === "Algorand") {
+
+      getFile(AlgorandTX).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+    } else if (document.querySelector(".TXSelect").value === "BNB Smart Chain") {
+
+      getFile(BSCTX).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+    } else if (document.querySelector(".TXSelect").value === "Polygon") {
+
+      getFile(PolygonTX).then(content =>{
+         // Using split method and passing "\n" as parameter for splitting
+         let lines =  content.trim().split("\n");
+         this.setState({
+           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+
+         })
+      }).catch(error =>{
+          console.log(error);
+      });
+
+
+
+
+    }
+
+
+
+
 
 
   }
@@ -547,12 +706,12 @@ export default class Simulations extends React.Component {
   <label className="label">
     <span className="label-text">Pick a price file</span>
   </label>
-  <select className="select select-bordered FileSelect" disabled={this.state.CustomPriceFileDisabled}>
+  <select className="select select-bordered FileSelect" disabled={this.state.CustomPriceFileDisabled} onChange={this.onPriceFileSelect}>
     <option disabled selected>Pick one</option>
     <option>Algorand</option>
     <option>BNB Smart Chain</option>
     <option>Ethereum</option>
-    <option>Polygon</option>
+    <option>Matic</option>
 
   </select>
 
@@ -595,7 +754,7 @@ export default class Simulations extends React.Component {
         <label className="label">
           <span className="label-text">Pick a transaction file</span>
         </label>
-        <select className="select select-bordered TXSelect" disabled={this.state.CustomTXFileDisabled}>
+        <select className="select select-bordered TXSelect" disabled={this.state.CustomTXFileDisabled} onChange={this.onTXFileSelect}>
           <option disabled selected>Pick one</option>
           <option>Algorand</option>
           <option>BNB Smart Chain</option>
