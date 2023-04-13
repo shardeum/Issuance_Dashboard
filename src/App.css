@@ -28,6 +28,11 @@ border-bottom: white solid 2px;
 
 }
 
+.background-flip {
+-webkit-transform: scaleX(-1);
+ transform: scaleX(-1);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -103,6 +108,7 @@ input[type="range"] {
 }
 
 
+
 .chartBox {
   width: auto;
   height: auto;
@@ -110,6 +116,17 @@ input[type="range"] {
   display: none;
 
 
+}
+
+.flip-background-image {
+  -webkit-transform: scaleX(-1);
+transform: scaleX(-1);
+background-repeat: repeat-y
+}
+
+
+background-image {
+  background-repeat: repeat-y
 }
 
 
@@ -135,4 +152,8 @@ body::-webkit-scrollbar {
   width: 100%;
      width: -moz-available;          /* WebKit-based browsers will ignore this. */
      width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+}
+
+#root {
+    min-height: 100vh;
 }

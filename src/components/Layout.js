@@ -19,6 +19,7 @@ export default function Layout({children}) {
       </Helmet>
 
       <main className="py-10 px-20 ml-auto mr-auto max-w-[75rem]">
+
         {/* Navigation bar */}
         <nav className="text-gray-400 py-2">
           {/* Logo */}
@@ -70,16 +71,29 @@ export default function Layout({children}) {
 
         {/* Dynamic content */}
         <div className="p-4">
+
+
           <main>{children}</main>
-        </div>
+          </div>
+
+
+
 
       </main>
       <div className="w-[26rem] h-[28rem] absolute top-32 right-0 -z-10" style={{
-        'background':
-          'radial-gradient(circle at right 20% bottom 40%, purple, transparent 50%),' +
-          'radial-gradient(circle at right 20% top 40%, blue, transparent 50%)',
-        opacity: 0.7
-      }}></div>
+              'background':
+                'radial-gradient(circle at right 20% bottom 40%, purple, transparent 50%),' +
+                'radial-gradient(circle at right 20% top 40%, blue, transparent 50%)',
+              opacity: 0.7
+            }}></div>
+
+          <div className="background-flip w-[26rem] h-[28rem] absolute bottom-0 left-0 -z-10" style={{
+                    'background':
+                      'radial-gradient(circle at right 20% bottom 40%, purple, transparent 50%),' +
+                      'radial-gradient(circle at right 20% top 40%, blue, transparent 50%)',
+                    opacity: 0.7
+                  }}></div>
+
 
       </Router>
   )
