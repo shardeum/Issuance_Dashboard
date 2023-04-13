@@ -38,12 +38,12 @@ export default function Layout({children}) {
     isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>Assumptions</NavLink>
 
 
-                    <NavLink to={'/Apr'} className={({ isActive, isPending }) =>
-      isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>APR</NavLink>
-
-
                       <NavLink to={'/Emissions'} className={({ isActive, isPending }) =>
         isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>Emissions</NavLink>
+
+
+        <NavLink to={'/Apr'} className={({ isActive, isPending }) =>
+    isPending ? "pending" : isActive ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active" : "nav-link px-5 -mb-0.5 text-white px-5"}>APR</NavLink>
 
 
 
@@ -62,8 +62,8 @@ export default function Layout({children}) {
           <Routes>
               <Route exact path='/' element={<Assumptions/>}/>
               <Route exact path='/Assumptions' element={<Assumptions/>}/>
-              <Route path='/Apr' element={<Apr/>}/>
               <Route path='/Emissions' element={<Emissions/>}/>
+              <Route path='/Apr' element={<Apr/>}/>
               <Route path='/Parameters' element={<Parameters/>}/>
               <Route path='/Simulations' element={<Simulations/>}/>
           </Routes>
