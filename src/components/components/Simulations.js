@@ -45,8 +45,30 @@ export default class Simulations extends React.Component {
     MinNodes: 600,
     CustomTXChecked: false,
     CustomDisabled: true,
+    CustomPriceFileChecked: false,
+    CustomTXFileChecked: false,
+    CustomPriceFileDisabled: false,
+    CustomTXFileDisabled: false,
     priceData: [],
     txvolData: [],
+  };
+
+  onCustomPriceFileCheckedChange = (event) => {
+    this.setState({
+      CustomPriceFileChecked: !this.state.CustomPriceFileChecked,
+      CustomPriceFileDisabled: !this.state.CustomPriceFileDisabled
+    }, () => this.updateMonitoring());
+    document.querySelector("#priceFile").classList.toggle('FileShown');
+      document.querySelector("#priceFile").classList.toggle('FileHidden');
+  };
+
+  onCustomTXFileCheckedChange = (event) => {
+    this.setState({
+      CustomTXFileChecked: !this.state.CustomTXFileChecked,
+      CustomTXFileDisabled: !this.state.CustomTXFileDisabled
+    }, () => this.updateMonitoring());
+    document.querySelector("#txvolData").classList.toggle('FileShown');
+      document.querySelector("#txvolData").classList.toggle('FileHidden');
   };
 
 
@@ -299,6 +321,8 @@ export default class Simulations extends React.Component {
     }, () => this.updateMonitoring());
   };
 
+
+
   onNodesPerShardChange = (event) => {
     this.setState({
       NodesPerShard: event.target.value
@@ -516,11 +540,39 @@ export default class Simulations extends React.Component {
 
 
                   <div className="form-control w-full max-w-xs">
+
+                    <div className="form-control w-full max-w-xs">
+  <label className="label">
+    <span className="label-text">Pick a price file</span>
+  </label>
+  <select className="select select-bordered" disabled={this.state.CustomPriceFileDisabled}>
+    <option disabled selected>Pick one</option>
+    <option>Algorand</option>
+    <option>BNB Smart Chain</option>
+    <option>Ethereum</option>
+    <option>Polygon</option>
+
+  </select>
+
+  <div className="form-control">
+    <label className="label cursor-pointer">
+      <span className="label-text customLabel">Upload a custom price file (.txt format)
+      </span>
+      <input type="checkbox" checked={this.state.CustomPriceFileChecked} className="checkbox checkbox-secondary" onChange={this.onCustomPriceFileCheckedChange}/>
+
+    </label>
+  </div>
+
+</div>
+
+
           <label className="label" htmlFor="priceFile">
-            <span className="label-text">Pick a price file (.txt format)</span>
+
+
+
 
           </label>
-          <input type="file" className="file-input file-input-bordered w-full max-w-xs" id="priceFile" name="priceFile" accept=".txt" onChange={this.onPriceFileChange} />
+          <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="priceFile" name="priceFile" accept=".txt" onChange={this.onPriceFileChange} />
 
         </div>
 
@@ -538,11 +590,29 @@ export default class Simulations extends React.Component {
 
 
       <div className="form-control w-full max-w-xs">
+        <label className="label">
+          <span className="label-text">Pick a transaction file</span>
+        </label>
+        <select className="select select-bordered" disabled={this.state.CustomTXFileDisabled}>
+          <option disabled selected>Pick one</option>
+          <option>Algorand</option>
+          <option>BNB Smart Chain</option>
+          <option>Ethereum</option>
+          <option>Polygon</option>
+
+        </select>
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text customLabel">Upload a custom transaction file (.txt format)
+            </span>
+            <input type="checkbox" checked={this.state.CustomTXFileChecked} className="checkbox checkbox-secondary" onChange={this.onCustomTXFileCheckedChange}/>
+
+          </label>
+        </div>
     <label className="label" htmlFor="txvolData">
-    <span className="label-text">Pick a transaction volume file (.txt format)</span>
 
     </label>
-    <input type="file" className="file-input file-input-bordered w-full max-w-xs" id="txvolData" name="txvolData" accept=".txt" onChange={this.onTxFileChange} />
+    <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="txvolData" name="txvolData" accept=".txt" onChange={this.onTxFileChange} />
 
     </div>
 

@@ -154,6 +154,17 @@ body::-webkit-scrollbar {
      width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
 }
 
-#root {
-    min-height: 100vh;
+.FileHidden{
+visibility: collapse;
+  opacity: 0;
+  transition: visibility 0.5s, opacity 1.5s linear;
+  height: 0;
+}
+
+.FileShown{
+visibility: visible;
+  opacity: 1;
+  transition: visibility 0.5s, opacity 1.5s linear;
+  height: unset;
+
 }
