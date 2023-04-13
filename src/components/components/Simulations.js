@@ -60,6 +60,7 @@ export default class Simulations extends React.Component {
     }, () => this.updateMonitoring());
     document.querySelector("#priceFile").classList.toggle('FileShown');
       document.querySelector("#priceFile").classList.toggle('FileHidden');
+      document.querySelector(".FileSelect").selectedIndex = 0;
   };
 
   onCustomTXFileCheckedChange = (event) => {
@@ -69,6 +70,7 @@ export default class Simulations extends React.Component {
     }, () => this.updateMonitoring());
     document.querySelector("#txvolData").classList.toggle('FileShown');
       document.querySelector("#txvolData").classList.toggle('FileHidden');
+            document.querySelector(".TXSelect").selectedIndex = 0;
   };
 
 
@@ -545,7 +547,7 @@ export default class Simulations extends React.Component {
   <label className="label">
     <span className="label-text">Pick a price file</span>
   </label>
-  <select className="select select-bordered" disabled={this.state.CustomPriceFileDisabled}>
+  <select className="select select-bordered FileSelect" disabled={this.state.CustomPriceFileDisabled}>
     <option disabled selected>Pick one</option>
     <option>Algorand</option>
     <option>BNB Smart Chain</option>
@@ -593,7 +595,7 @@ export default class Simulations extends React.Component {
         <label className="label">
           <span className="label-text">Pick a transaction file</span>
         </label>
-        <select className="select select-bordered" disabled={this.state.CustomTXFileDisabled}>
+        <select className="select select-bordered TXSelect" disabled={this.state.CustomTXFileDisabled}>
           <option disabled selected>Pick one</option>
           <option>Algorand</option>
           <option>BNB Smart Chain</option>
