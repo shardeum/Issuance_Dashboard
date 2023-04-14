@@ -68,6 +68,7 @@ export default class Simulations extends React.Component {
     });
     document.querySelector("#priceFile").classList.toggle('FileShown');
     document.querySelector("#priceFile").classList.toggle('FileHidden');
+
     document.querySelector(".FileSelect").selectedIndex = 0;
   };
 
@@ -273,7 +274,7 @@ export default class Simulations extends React.Component {
         }
       }
     });
-        document.querySelector(".paramChange").classList.remove('FileShown');
+    document.querySelector(".paramChange").classList.remove('FileShown');
   };
 
   onPriceFileChange = (event) => {
@@ -290,6 +291,7 @@ export default class Simulations extends React.Component {
     };
 
     reader.readAsText(file);
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   }
 
@@ -355,7 +357,7 @@ export default class Simulations extends React.Component {
       });
 
     }
-            document.querySelector(".paramChange").classList.add('FileShown');
+    document.querySelector(".paramChange").classList.add('FileShown');
   }
 
   onTXFileSelect = (event) => {
@@ -420,7 +422,7 @@ export default class Simulations extends React.Component {
       });
 
     }
-      document.querySelector(".paramChange").classList.add('FileShown');
+    document.querySelector(".paramChange").classList.add('FileShown');
   }
 
   onTxFileChange = (event) => {
@@ -432,12 +434,11 @@ export default class Simulations extends React.Component {
       const lines = e.target.result.split('\n');
       this.setState({
         txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
-
       })
     };
 
     reader.readAsText(file);
-
+    document.querySelector(".paramChange").classList.add('FileShown');
   }
 
   componentDidMount() {
@@ -453,7 +454,7 @@ export default class Simulations extends React.Component {
       CustomTXChecked: !this.state.CustomTXChecked,
       CustomDisabled: !this.state.CustomDisabled
     }, () => this.updateMonitoring());
-      document.querySelector(".paramChange").classList.add('FileShown');
+    document.querySelector(".paramChange").classList.add('FileShown');
   };
 
   onNodesPerShardChange = (event) => {
@@ -809,8 +810,8 @@ export default class Simulations extends React.Component {
                   {this.getNumber(this.state.MaxSHMReached)}
                 </div>
                 <div className="stat-desc">
-                Max SHM Supply
-              </div>
+                  Max SHM Supply
+                </div>
               </div>
             </div>
           </div>
@@ -839,7 +840,7 @@ export default class Simulations extends React.Component {
           </label>
           <div className="tooltip" data-tip="Determines security and redundancy of the network">
             <label className="input-group">
-              <input type="text" value={this.state.NodesPerShard} className="input input-bordered" disabled onChange={this.onNodesPerShardChange}/>
+              <input type="text" value={this.state.NodesPerShard} className="input input-bordered" disabled="disabled" onChange={this.onNodesPerShardChange}/>
               <span>Nodes</span>
             </label>
           </div>
@@ -851,7 +852,7 @@ export default class Simulations extends React.Component {
           </label>
           <div className="tooltip" data-tip="This is the minimum number of nodes the network must have regardless of how low the TPS is. This is needed in order to maintain a certain level of decentralization.">
             <label className="input-group">
-              <input type="text" value={this.state.MinNodes} className="input input-bordered" disabled onChange={this.onMinNodesChange}/>
+              <input type="text" value={this.state.MinNodes} className="input input-bordered" disabled="disabled" onChange={this.onMinNodesChange}/>
               <span>Nodes</span>
             </label>
           </div>
@@ -1011,7 +1012,7 @@ If Standby ratio < 1 then set it to 1
         </label>
         <div className="tooltip" data-tip="Cool TPS per node; about 20% of Max TPS; node can easily handle this TPS.">
           <label className="input-group">
-            <input type="text" value={this.state.TPSPerNode} className="input input-bordered" disabled onChange={this.onTPSPerNodeChange}/>
+            <input type="text" value={this.state.TPSPerNode} className="input input-bordered" disabled="disabled" onChange={this.onTPSPerNodeChange}/>
             <span>TPS</span>
           </label>
         </div>
