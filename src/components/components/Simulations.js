@@ -1,5 +1,5 @@
 import React from "react";
-import { jsPDF } from "jspdf";
+import {jsPDF} from "jspdf";
 import Chart from "chart.js/auto";
 import {
   Chart as ChartJS,
@@ -20,7 +20,6 @@ import BSCPrice from ".././components/SimData/bnb-price.txt";
 import BSCTX from ".././components/SimData/bsc-tx-vol.txt";
 import PolygonPrice from ".././components/SimData/matic-price.txt";
 import PolygonTX from ".././components/SimData/poly-tx-vol.txt";
-
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -59,6 +58,7 @@ export default class Simulations extends React.Component {
     CustomTXFileDisabled: false,
     priceData: [],
     txvolData: [],
+    MaxSHMReached: 0
   };
 
   onCustomPriceFileCheckedChange = (event) => {
@@ -67,8 +67,8 @@ export default class Simulations extends React.Component {
       CustomPriceFileDisabled: !this.state.CustomPriceFileDisabled
     });
     document.querySelector("#priceFile").classList.toggle('FileShown');
-      document.querySelector("#priceFile").classList.toggle('FileHidden');
-      document.querySelector(".FileSelect").selectedIndex = 0;
+    document.querySelector("#priceFile").classList.toggle('FileHidden');
+    document.querySelector(".FileSelect").selectedIndex = 0;
   };
 
   onCustomTXFileCheckedChange = (event) => {
@@ -77,393 +77,366 @@ export default class Simulations extends React.Component {
       CustomTXFileDisabled: !this.state.CustomTXFileDisabled
     });
     document.querySelector("#txvolData").classList.toggle('FileShown');
-      document.querySelector("#txvolData").classList.toggle('FileHidden');
-            document.querySelector(".TXSelect").selectedIndex = 0;
+    document.querySelector("#txvolData").classList.toggle('FileHidden');
+    document.querySelector(".TXSelect").selectedIndex = 0;
+
   };
 
+  onDrawChart = (event) => {
 
-   onDrawChart = (event) => {
+    // the amount of data points for price and tx volume may be different.
+    // we assume the most current data point is for the same day.
+    // select only the part where both have data points
+    const minData = Math.min(this.state.priceData.length, this.state.txvolData.length)
 
+    if (this.state.priceData.length === 0) {
 
-      // the amount of data points for price and tx volume may be different.
-      // we assume the most current data point is for the same day.
-      // select only the part where both have data points
-      const minData = Math.min(this.state.priceData.length, this.state.txvolData.length)
+      alert('Please upload a valid price file.');
+      return;
+    }
+    if (this.state.txvolData.length === 0) {
 
+      alert('Please upload a valid tx volume file.');
+      return;
+    }
 
+    let priceData = [...this.state.priceData].splice(0 - minData)
+    let txvolData = [...this.state.txvolData].splice(0 - minData)
 
-      if (this.state.priceData.length === 0) {
+    const canvas = document.getElementById('simChart');
+    const ctx = canvas.getContext('2d');
 
-          alert('Please upload a valid price file.');
-          return;
-      }
-      if (this.state.txvolData.length === 0) {
+    if (window.myChart) {
+      window.myChart.destroy();
+    }
 
-          alert('Please upload a valid tx volume file.');
-          return;
-      }
+    const priceDataset = priceData.map((value, index) => {
+      return {x: index, y: value};
 
+    });
+    const txvolDataset = txvolData.map((value, index) => {
+      return {x: index, y: value};
+    });
 
+    const activeDataset = txvolData.map((value, index) => {
+      return {
+        x: index,
+        y: Math.max(this.state.MinNodes, value / 86400 / this.state.TPSPerNode * this.state.NodesPerShard)
+      };
+    });
 
-          let priceData = [...this.state.priceData].splice(0-minData)
-          let txvolData = [...this.state.txvolData].splice(0-minData)
+    const netrevDataset = txvolData.map((value, index) => {
+      return {
+        x: index,
+        y: value * this.state.AvgTxFee
+      };
+    });
+    const netexpDataset = activeDataset.map((value, index) => {
+      return {
+        x: index,
+        y: value.y * this.state.NodeRewardPerHour * 24
+      };
+    });
+    const netincDataset = netrevDataset.map((value, index) => {
+      return {
+        x: index,
+        y: value.y - netexpDataset[index].y
+      };
+    });
+    const shmdelDataset = netincDataset.map((value, index) => {
+      return {
+        x: index,
+        y: value.y / priceDataset[index].y
+      };
 
+    });
+    let shmsup = 0
+    const shmsupDataset = shmdelDataset.map((value, index) => {
+      shmsup -= value.y
+      return {x: index, y: shmsup};
 
+    });
 
-      const canvas = document.getElementById('simChart');
-      const ctx = canvas.getContext('2d');
+    this.setState({
+      MaxSHMReached: Math.max(...shmsupDataset.map(o => o.y))
 
-      if (window.myChart) {
-          window.myChart.destroy();
-      }
+    })
 
-      const priceDataset = priceData.map((value, index) => {
-          return {x: index, y: value};
+    document.querySelector(".chartBox").style.display = "block";
 
-      });
-      const txvolDataset = txvolData.map((value, index) => {
-          return {x: index, y: value};
-      });
-
-      const activeDataset = txvolData.map((value, index) => {
-          return {x: index, y: Math.max(this.state.MinNodes, value/86400/this.state.TPSPerNode*this.state.NodesPerShard)};
-      });
-
-      const netrevDataset = txvolData.map((value, index) => {
-          return {x: index, y: value*this.state.AvgTxFee};
-      });
-      const netexpDataset = activeDataset.map((value, index) => {
-          return {x: index, y: value.y*this.state.NodeRewardPerHour*24};
-      });
-      const netincDataset = netrevDataset.map((value, index) => {
-          return {x: index, y: value.y - netexpDataset[index].y};
-      });
-      const shmdelDataset = netincDataset.map((value, index) => {
-          return {x: index, y: value.y / priceDataset[index].y};
-      });
-      let shmsup = 0
-      const shmsupDataset = shmdelDataset.map((value, index) => {
-          shmsup -= value.y
-          return {x: index, y: shmsup};
-      });
-
-
-      document.querySelector(".chartBox").style.display = "block";
-
-
-
-      window.myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-              datasets: [
-                  {
-                      label: 'Tx Volume',
-                      data: txvolDataset,
-                      borderColor: 'rgb(75, 192, 192)',
-                      tension: 1,
-                      yAxisID: 'y-txvol'
-                  },
-                  {
-                      label: 'Price Data',
-                      data: priceDataset,
-                      borderColor: 'rgb(255, 99, 132)',
-                      tension: 1,
-                      yAxisID: 'y-price'
-                  },
-                  {
-                        label: 'Active Nodes',
-                        data: activeDataset,
-                        borderColor: 'rgb(200, 99, 200)',
-                        tension: 1,
-                        yAxisID: 'y-active'
-                    },
-
-
-                    {
-                        label: 'Supply Data',
-                        data: shmsupDataset,
-                        borderColor: 'rgb(132, 99, 255)',
-                        tension: 1,
-                        yAxisID: 'y-shmsup'
-                    }
-              ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 2,
-            plugins: {
-              title: {
-                display: true,
-                text: "Node Reward Simulation"
-              },
-              legend: {
-                display: true
-              },
-              colors: {
-                enabled: true
-              }
-            },
-              scales: {
-                  x: {
-                        display: true,
-                      type: 'linear',
-                      title: {
-                          display: true,
-                          text: 'Days Since Genesis'
-                      },
-                      min: 0,
-                      max: 2000,
-                      ticks: {
-                          callback: (value, index, values) => {
-                              return value.toFixed(0);
-                          }
-                      }
-                  },
-                'y-price': {
-                      display: false,
-                  },
-                  'y-txvol': {
-                    display: false,
-                      type: 'logarithmic',
-                      position: 'right',
-                      title: {
-                          display: true,
-                          text: 'Tx Volume'
-                      },
-                      min: 0,
-                      max: Math.max(...txvolData),
-                  },
-
-                  'y-shmsup': {
-                    display: true,
-                      type: 'linear',
-                      position: 'left',
-                      title: {
-                          display: true,
-                          text: 'SHM Supply'
-                      },
-                      min: 0,
-
-                  },
-                  'y-active': {
-                    display: false ,
-                      type: 'linear',
-                      position: 'left',
-                      title: {
-                          display: true,
-                          text: 'Active Nodes'
-                      },
-                      min: Math.min.apply(null, activeDataset.map(function(a){return a.y;})),
-                      max: Math.max.apply(null, activeDataset.map(function(a){return a.y;})),
-                      grid: {
-                          drawOnChartArea: false
-                      }
-                  },
-
-              }
+    window.myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'Tx Volume',
+            data: txvolDataset,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 1,
+            yAxisID: 'y-txvol'
+          }, {
+            label: 'Price Data',
+            data: priceDataset,
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 1,
+            yAxisID: 'y-price'
+          }, {
+            label: 'Active Nodes',
+            data: activeDataset,
+            borderColor: 'rgb(200, 99, 200)',
+            tension: 1,
+            yAxisID: 'y-active'
+          }, {
+            label: 'Supply Data',
+            data: shmsupDataset,
+            borderColor: 'rgb(132, 99, 255)',
+            tension: 1,
+            yAxisID: 'y-shmsup'
           }
-      });
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 2,
+        plugins: {
+          title: {
+            display: true,
+            text: "Node Reward Simulation"
+          },
+          legend: {
+            display: true
+          },
+          colors: {
+            enabled: true
+          }
+        },
+        scales: {
+          x: {
+            display: true,
+            type: 'linear',
+            title: {
+              display: true,
+              text: 'Days Since Genesis'
+            },
+            min: 0,
+            max: 2000,
+            ticks: {
+              callback: (value, index, values) => {
+                return value.toFixed(0);
+              }
+            }
+          },
+          'y-price': {
+            display: false
+          },
+          'y-txvol': {
+            display: false,
+            type: 'logarithmic',
+            position: 'right',
+            title: {
+              display: true,
+              text: 'Tx Volume'
+            },
+            min: 0,
+            max: Math.max(...txvolData)
+          },
 
-
-
-
-
-
-
-
+          'y-shmsup': {
+            display: true,
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'SHM Supply'
+            },
+            min: 0
+          },
+          'y-active': {
+            display: false,
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Active Nodes'
+            },
+            min: Math.min.apply(null, activeDataset.map(function(a) {
+              return a.y;
+            })),
+            max: Math.max.apply(null, activeDataset.map(function(a) {
+              return a.y;
+            })),
+            grid: {
+              drawOnChartArea: false
+            }
+          }
+        }
+      }
+    });
+        document.querySelector(".paramChange").classList.remove('FileShown');
   };
-
-
 
   onPriceFileChange = (event) => {
 
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-        const file = event.target.files[0];
-        const reader = new FileReader();
+    reader.onload = (e) => {
+      const lines = e.target.result.split('\n');
+      this.setState({
+        priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-        reader.onload = (e) => {
-            const lines = e.target.result.split('\n');
-            this.setState({
-              priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      })
+    };
 
-            })
-        };
-
-        reader.readAsText(file);
-
+    reader.readAsText(file);
 
   }
 
-
   onPriceFileSelect = (event) => {
 
-
-    async function getFile(fileURL){
-        let fileContent = await fetch(fileURL);
-        fileContent = await  fileContent.text();
-        return fileContent;
+    async function getFile(fileURL) {
+      let fileContent = await fetch(fileURL);
+      fileContent = await fileContent.text();
+      return fileContent;
     }
 
     if (document.querySelector(".FileSelect").value === "Ethereum") {
 
       // Passing file url
-      getFile(EthereumPrice).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(EthereumPrice).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
     } else if (document.querySelector(".FileSelect").value === "Algorand") {
 
-      getFile(AlgorandPrice).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(AlgorandPrice).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
     } else if (document.querySelector(".FileSelect").value === "BNB Smart Chain") {
 
-      getFile(BSCPrice).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(BSCPrice).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
     } else if (document.querySelector(".FileSelect").value === "Matic") {
 
-      getFile(PolygonPrice).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(PolygonPrice).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          priceData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
-
-
-
     }
-
-
-
-
-
-
+            document.querySelector(".paramChange").classList.add('FileShown');
   }
-
-
 
   onTXFileSelect = (event) => {
 
-
-    async function getFile(fileURL){
-        let fileContent = await fetch(fileURL);
-        fileContent = await  fileContent.text();
-        return fileContent;
+    async function getFile(fileURL) {
+      let fileContent = await fetch(fileURL);
+      fileContent = await fileContent.text();
+      return fileContent;
     }
 
     if (document.querySelector(".TXSelect").value === "Ethereum") {
 
       // Passing file url
-      getFile(EthereumTX).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(EthereumTX).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
     } else if (document.querySelector(".TXSelect").value === "Algorand") {
 
-      getFile(AlgorandTX).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(AlgorandTX).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
     } else if (document.querySelector(".TXSelect").value === "BNB Smart Chain") {
 
-      getFile(BSCTX).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(BSCTX).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
     } else if (document.querySelector(".TXSelect").value === "Polygon") {
 
-      getFile(PolygonTX).then(content =>{
-         // Using split method and passing "\n" as parameter for splitting
-         let lines =  content.trim().split("\n");
-         this.setState({
-           txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      getFile(PolygonTX).then(content => {
+        // Using split method and passing "\n" as parameter for splitting
+        let lines = content.trim().split("\n");
+        this.setState({
+          txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-         })
-      }).catch(error =>{
-          console.log(error);
+        })
+      }).catch(error => {
+        console.log(error);
       });
 
-
-
-
     }
-
-
-
-
-
-
+      document.querySelector(".paramChange").classList.add('FileShown');
   }
-
-
 
   onTxFileChange = (event) => {
 
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-        const file = event.target.files[0];
-        const reader = new FileReader();
+    reader.onload = (e) => {
+      const lines = e.target.result.split('\n');
+      this.setState({
+        txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
 
-        reader.onload = (e) => {
-            const lines = e.target.result.split('\n');
-            this.setState({
-              txvolData: lines.map(line => parseFloat(line)).filter(value => !isNaN(value))
+      })
+    };
 
-            })
-        };
-
-        reader.readAsText(file);
-
+    reader.readAsText(file);
 
   }
 
@@ -480,20 +453,21 @@ export default class Simulations extends React.Component {
       CustomTXChecked: !this.state.CustomTXChecked,
       CustomDisabled: !this.state.CustomDisabled
     }, () => this.updateMonitoring());
+      document.querySelector(".paramChange").classList.add('FileShown');
   };
-
-
 
   onNodesPerShardChange = (event) => {
     this.setState({
       NodesPerShard: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
   };
 
   onTXfeesChange = (event) => {
     this.setState({
       TXfees: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -501,6 +475,7 @@ export default class Simulations extends React.Component {
     this.setState({
       NodeRewardPerHour: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -508,6 +483,7 @@ export default class Simulations extends React.Component {
     this.setState({
       Stake: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -515,6 +491,7 @@ export default class Simulations extends React.Component {
     this.setState({
       StabilityFactor: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -522,6 +499,7 @@ export default class Simulations extends React.Component {
     this.setState({
       MinNodes: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -568,6 +546,7 @@ export default class Simulations extends React.Component {
       SHMValue: event.target.value,
       StabilityFactor: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -575,6 +554,7 @@ export default class Simulations extends React.Component {
     this.setState({
       AvgTxFee: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -582,6 +562,7 @@ export default class Simulations extends React.Component {
     this.setState({
       NetworkTPS: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -589,6 +570,7 @@ export default class Simulations extends React.Component {
     this.setState({
       ActiveNodes: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -596,6 +578,7 @@ export default class Simulations extends React.Component {
     this.setState({
       SeverRentPerHour: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -603,6 +586,7 @@ export default class Simulations extends React.Component {
     this.setState({
       TPSPerNode: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -610,6 +594,7 @@ export default class Simulations extends React.Component {
     this.setState({
       SHMSupply: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -617,6 +602,7 @@ export default class Simulations extends React.Component {
     this.setState({
       MarketAPY: event.target.value
     }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
 
   };
 
@@ -626,7 +612,7 @@ export default class Simulations extends React.Component {
       ExpensePerDay: this.state.SeverRentPerHour * 24,
       NetworkRevenuePerDay: this.state.NetworkTPS * 86400 * this.state.AvgTxFee,
       NetworkExpensePerDay: this.state.ActiveNodes * this.state.NodeRewardPerHour * 24,
-      NetworkDeltaPerDay: this.state.NetworkIncomePerDay / this.state.StabilityFactor,
+      NetworkDeltaPerDay: this.state.NetworkIncomePerDay / this.state.StabilityFactor
     }, () => this.updateIncomeDay());
   };
 
@@ -659,7 +645,6 @@ export default class Simulations extends React.Component {
 
   }
 
-
   onDownloadPDF = (event) => {
 
     const canvas = document.querySelector("#simChart")
@@ -673,89 +658,69 @@ export default class Simulations extends React.Component {
 
   }
 
+  getNumber = (labelValue) => {
 
+    return Math.abs(Number(labelValue)) >= 1.0e+9
 
+      ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + "B"
+      // Six Zeroes for Millions
+      : Math.abs(Number(labelValue)) >= 1.0e+6
 
+        ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + "M"
+        // Three Zeroes for Thousands
+        : Math.abs(Number(labelValue)) >= 1.0e+3
+
+          ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + "K"
+
+          : Math.abs(Number(labelValue));
+
+  }
 
   render() {
 
+    return (<> < h2 > Node Reward Simulations</h2> < div className = "flex flex-wrap" > <div className="flex-1 chart min-w-[50%] pt-10">
 
-    return (<>
+      <div className="form-control w-full max-w-xs">
 
-
-        <h2>Node Reward Simulations</h2>
-
-
-
-      <div className ="flex flex-wrap">
-
-
-                <div className="flex-1 chart min-w-[50%] pt-10">
-
-
-
-
-
-
-
-
-
-                  <div className="form-control w-full max-w-xs">
-
-                    <div className="form-control w-full max-w-xs">
-  <label className="label">
-    <span className="label-text">Pick a price file</span>
-  </label>
-  <select className="select select-bordered FileSelect" disabled={this.state.CustomPriceFileDisabled} onChange={this.onPriceFileSelect}>
-    <option disabled selected>Pick one</option>
-    <option>Algorand</option>
-    <option>BNB Smart Chain</option>
-    <option>Ethereum</option>
-    <option>Matic</option>
-
-  </select>
-
-  <div className="form-control">
-    <label className="label cursor-pointer">
-      <span className="label-text customLabel">Upload a custom price file (.txt format)
-      </span>
-      <input type="checkbox" checked={this.state.CustomPriceFileChecked} className="checkbox checkbox-secondary" onChange={this.onCustomPriceFileCheckedChange}/>
-
-    </label>
-  </div>
-
-</div>
-
-
-          <label className="label" htmlFor="priceFile">
-
-
-
-
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Pick a price file</span>
           </label>
-          <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="priceFile" name="priceFile" accept=".txt" onChange={this.onPriceFileChange} />
+          <select className="select select-bordered FileSelect" disabled={this.state.CustomPriceFileDisabled} onChange={this.onPriceFileSelect}>
+            <option disabled="disabled" selected="selected">Pick one</option>
+            <option>Algorand</option>
+            <option>BNB Smart Chain</option>
+            <option>Ethereum</option>
+            <option>Matic</option>
+
+          </select>
+
+          <div className="form-control">
+            <label className="label cursor-pointer">
+              <span className="label-text customLabel">Upload a custom price file (.txt format)
+              </span>
+              <input type="checkbox" checked={this.state.CustomPriceFileChecked} className="checkbox checkbox-secondary" onChange={this.onCustomPriceFileCheckedChange}/>
+
+            </label>
+          </div>
 
         </div>
 
-              </div>
+        <label className="label" htmlFor="priceFile"></label>
+        <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="priceFile" name="priceFile" accept=".txt" onChange={this.onPriceFileChange}/>
 
+      </div>
 
+    </div>
 
-              <div className="flex-1 min-w-[50%] pt-10">
-
-
-
-
-
-
-
+    <div className="flex-1 min-w-[50%] pt-10">
 
       <div className="form-control w-full max-w-xs">
         <label className="label">
           <span className="label-text">Pick a transaction file</span>
         </label>
         <select className="select select-bordered TXSelect" disabled={this.state.CustomTXFileDisabled} onChange={this.onTXFileSelect}>
-          <option disabled selected>Pick one</option>
+          <option disabled="disabled" selected="selected">Pick one</option>
           <option>Algorand</option>
           <option>BNB Smart Chain</option>
           <option>Ethereum</option>
@@ -770,128 +735,100 @@ export default class Simulations extends React.Component {
 
           </label>
         </div>
-    <label className="label" htmlFor="txvolData">
+        <label className="label" htmlFor="txvolData"></label>
+        <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="txvolData" name="txvolData" accept=".txt" onChange={this.onTxFileChange}/>
 
-    </label>
-    <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="txvolData" name="txvolData" accept=".txt" onChange={this.onTxFileChange} />
+      </div>
+
+      <button className="btn mt-5" onClick={this.onDrawChart}>Run Simulation</button>
+      <div className="label-text customLabel pt-5 paramChange FileHidden ">*Parameters updated please re-run simulation</div>
+    </div>
+
+  </div>
+
+  <div className="flex flex-wrap">
+
+    <div className="flex-1 chart w-100 pt-10">
+
+      <div className="chartCard">
+        <div className="chartBox">
+          <button class="btn secondary" onClick={this.onToggleChart}>Toogle View</button>
+          <div class="flex min-w-full apr-stats items-center">
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Revenue $/day</div>
+                <div className="stat-value">
+                  {"$" + this.state.RevenuePerDay.toFixed(2)}
+                </div>
+                <div className="stat-desc">
+                  Node reward * 24 / Standby ratio
+                </div>
+              </div>
+            </div>
+
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Expense $/day</div>
+                <div className="stat-value">
+                  {"$" + this.state.ExpensePerDay.toFixed(2)}
+                </div>
+                <div className="stat-desc">
+                  Expense $/day
+                </div>
+              </div>
+            </div>
+
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Income $/day</div>
+                <div className="stat-value">
+                  {"$" + this.state.IncomePerDay.toFixed(2)}
+                </div>
+                <div className="stat-desc">
+                  Income = Revenue - Expense
+                </div>
+              </div>
+            </div>
+
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">APY %/year</div>
+                <div className="stat-value">
+                  {this.state.APYPerYear.toFixed(0) + "%"}
+                </div>
+                <div className="stat-desc">
+                  100 * Income * 365 / Stake
+                </div>
+              </div>
+            </div>
+
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Max Supply Reached</div>
+                <div className="stat-value">
+                  {this.getNumber(this.state.MaxSHMReached)}
+                </div>
+                <div className="stat-desc">
+                Max SHM Supply
+              </div>
+              </div>
+            </div>
+          </div>
+          <div className="holder">
+            <span id="info"/>
+            <canvas id="simChart"/>
+          </div>
+          <button class="btn secondary" onClick={this.onDownloadPDF}>Download PDF</button>
+        </div>
+      </div>
 
     </div>
 
+  </div>
 
+  <div className="flex flex-wrap">
 
-              <button className="btn mt-5" onClick={this.onDrawChart}>Run Simulation</button>
-
-
-
-
-                </div>
-
-
-
-
-
-
-            </div>
-
-
-
-            <div className ="flex flex-wrap">
-
-              <div className="flex-1 chart w-100 pt-10">
-
-
-
-
-
-
-            <div className="chartCard">
-                  <div className="chartBox">
-                    <button class="btn secondary" onClick={this.onToggleChart}>Toogle View</button>
-                      <div class="flex-1 min-w-full apr-stats items-center">
-                        <div className="stats shadow">
-                          <div className="stat">
-                            <div className="stat-title">Revenue $/day</div>
-                            <div className="stat-value">
-                              {"$" + this.state.RevenuePerDay.toFixed(2)}
-                            </div>
-                            <div className="stat-desc">
-                              Node reward * 24 / Standby ratio
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="stats shadow">
-                          <div className="stat">
-                            <div className="stat-title">Expense $/day</div>
-                            <div className="stat-value">
-                              {"$" + this.state.ExpensePerDay.toFixed(2)}
-                            </div>
-                            <div className="stat-desc">
-                              Expense $/day
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="stats shadow">
-                          <div className="stat">
-                            <div className="stat-title">Income $/day</div>
-                            <div className="stat-value">
-                              {"$" + this.state.IncomePerDay.toFixed(2)}
-                            </div>
-                            <div className="stat-desc">
-                              Income = Revenue - Expense
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="stats shadow">
-                          <div className="stat">
-                            <div className="stat-title">APY %/year</div>
-                            <div className="stat-value">
-                              {this.state.APYPerYear.toFixed(2) + "%"}
-                            </div>
-                            <div className="stat-desc">
-                              100 * Income * 365 / Stake amount
-                            </div>
-                          </div>
-                        </div>
-                          </div>
-                    <div className="holder">
-                    <span id="info" />
-                    <canvas id="simChart" />
-                    </div>
-                        <button class="btn secondary" onClick={this.onDownloadPDF}>Download PDF</button>
-                  </div>
-                </div>
-
-
-
-
-          </div>
-
-
-
-
-            </div>
-
-
-
-
-
-
-
-      <div className ="flex flex-wrap">
-
-
-
-
-
-
-
-
-
-
-        <div className="flex-1 min-w-[50%] apr-stats">
+    <div className="flex-1 min-w-[50%] apr-stats">
 
       <div className="flex-col pt-10">
         <h2>Network</h2>
@@ -902,7 +839,7 @@ export default class Simulations extends React.Component {
           </label>
           <div className="tooltip" data-tip="Determines security and redundancy of the network">
             <label className="input-group">
-              <input type="text" value={this.state.NodesPerShard} className="input input-bordered" onChange={this.onNodesPerShardChange}/>
+              <input type="text" value={this.state.NodesPerShard} className="input input-bordered" disabled onChange={this.onNodesPerShardChange}/>
               <span>Nodes</span>
             </label>
           </div>
@@ -914,7 +851,7 @@ export default class Simulations extends React.Component {
           </label>
           <div className="tooltip" data-tip="This is the minimum number of nodes the network must have regardless of how low the TPS is. This is needed in order to maintain a certain level of decentralization.">
             <label className="input-group">
-              <input type="text" value={this.state.MinNodes} className="input input-bordered" onChange={this.onMinNodesChange}/>
+              <input type="text" value={this.state.MinNodes} className="input input-bordered" disabled onChange={this.onMinNodesChange}/>
               <span>Nodes</span>
             </label>
           </div>
@@ -983,7 +920,7 @@ export default class Simulations extends React.Component {
         </label>
         <div className="tooltip" data-tip="FDAO uses this to set the Stability Factor. Stability factor changed about once a day.">
           <label className="input-group">
-            <input type="text" value={this.state.SHMValue} className="input input-bordered" onChange={this.onSHMValueChange}/>
+            <input type="text" value={this.state.SHMValue} className="input input-bordered" disabled="disabled" onChange={this.onSHMValueChange}/>
             <span>USD</span>
           </label>
         </div>
@@ -1011,23 +948,6 @@ export default class Simulations extends React.Component {
         </div>
 
       </div>
-
-
-      <div className="form-control min-h-200">
-        <label className="label">
-          <span className="label-text">SHM Supply #</span>
-        </label>
-        <div className="tooltip" data-tip="Supply is used to guide decisions on the parameters the FDAO sets.
-Must keep this below 259080000 SHM. It can go up and down based on Network Income.
-SHM Supply = SHM Supply - SHM Delta">
-          <label className="input-group">
-            <input type="text" value={this.state.SHMSupply} className="input input-bordered" disabled="disabled" onChange={this.onSHMSupplyChange}/>
-            <span>SHM</span>
-          </label>
-        </div>
-      </div>
-
-
 
     </div>
 
@@ -1091,20 +1011,13 @@ If Standby ratio < 1 then set it to 1
         </label>
         <div className="tooltip" data-tip="Cool TPS per node; about 20% of Max TPS; node can easily handle this TPS.">
           <label className="input-group">
-            <input type="text" value={this.state.TPSPerNode} className="input input-bordered" onChange={this.onTPSPerNodeChange}/>
+            <input type="text" value={this.state.TPSPerNode} className="input input-bordered" disabled onChange={this.onTPSPerNodeChange}/>
             <span>TPS</span>
           </label>
         </div>
       </div>
 
-
-
     </div>
-
-
-
-
-
 
     < /div></ >);
   }
