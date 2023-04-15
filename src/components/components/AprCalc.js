@@ -109,7 +109,7 @@ export default class AprCalc extends React.Component {
           </div>
         </div>
 
-        <div className="stats shadow min-h-200">
+        <div className="stats stats-vertical sm:stats-horizontal shadow min-h-200">
           <div className="stat">
             <div className="stat-title">Approx SHM Issued per Month</div>
             <div className="stat-value">{this.state.SHMperDay * 30}
@@ -173,7 +173,7 @@ export default class AprCalc extends React.Component {
       </div>
     </div>
     <div className="flex-1 min-w-full apr-stats">
-      <div className="stats shadow">
+      <div className="stats stats-vertical sm:stats-horizontal shadow">
         <div className="stat">
           <div className="stat-title">Approx Time Validating</div>
           <div className="stat-value">
@@ -185,7 +185,7 @@ export default class AprCalc extends React.Component {
         </div>
       </div>
 
-      <div className="stats shadow">
+      <div className="stats stats-vertical sm:stats-horizontal shadow">
         <div className="stat">
           <div className="stat-title">SHM per Day</div>
           <div className="stat-value">
@@ -198,7 +198,7 @@ export default class AprCalc extends React.Component {
         </div>
       </div>
 
-      <div className="stats shadow">
+      <div className="stats stats-vertical sm:stats-horizontal shadow">
         <div className="stat">
           <div className="stat-title">SHM per Month</div>
           <div className="stat-value">
@@ -211,7 +211,7 @@ export default class AprCalc extends React.Component {
         </div>
       </div>
 
-      <div className="stats shadow">
+      <div className="stats stats-vertical sm:stats-horizontal shadow">
         <div className="stat">
           <div className="stat-title">Return Day</div>
           <div className="stat-value">
@@ -224,7 +224,7 @@ export default class AprCalc extends React.Component {
         </div>
       </div>
 
-      <div className="stats shadow">
+      <div className="stats stats-vertical sm:stats-horizontal shadow">
         <div className="stat">
           <div className="stat-title">Return Month</div>
           <div className="stat-value">
@@ -237,7 +237,7 @@ export default class AprCalc extends React.Component {
         </div>
       </div>
 
-      <div className="stats shadow">
+      <div className="stats stats-vertical sm:stats-horizontal shadow">
         <div className="stat">
           <div className="stat-title">APR</div>
           <div className="stat-value">{this.state.Apr.toFixed(0)}%</div>

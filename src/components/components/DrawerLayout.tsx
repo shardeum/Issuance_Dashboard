@@ -18,7 +18,7 @@ function Nav() {
           <div className="flex-1 items-center">
             <div className="hidden md:block flex flex-direction-column">
               <ul className="flex-grow flex mb-3 mt-10 border-b-2 border-b-gray-500 h-10 items-stretch sm:mb-10">
-                <NavLink to={'/Assumptions'} className={(
+                <NavLink to={'/'} className={(
                     {isActive, isPending}) => isPending
                     ? "pending"
                     : isActive
@@ -75,7 +75,7 @@ function Nav() {
 
         <div className="md:hidden" id="mobile-menu">
           <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <NavLink to={'/Assumptions'} onClick={() => {
+            <NavLink to={'/'} onClick={() => {
                 setIsOpen(!isOpen);
                 lockScroll()
               }} className={(

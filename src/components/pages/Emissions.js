@@ -67,12 +67,12 @@ export default function Emissions() {
     ]
   });
 
-  return (<div className="App">
+  return (<div className="App pt-5">
     <h2 className="text-lg font-bold">Shardeum Distribution</h2>
     <p className="pt-5">49% of total SHM supply will be given out at genesis to the Foundation, Ecosystem, Team and Sale accounts. The remaining 51% will be issued via node reward.</p>
     <p className="py-5">The below graphs show SHM distribution at a token (graph 1) and percentage (graph 2) level.</p>
 
-    <div className="flex">
+    <div className="flex-1 flex-col sm:flex sm:flex-row">
       <BarChart chartData={chartData2}/>
       <PieChart plugins={[ChartDataLabels]} chartData={chartData3}/>
     </div>

@@ -65,9 +65,6 @@ li.li-right{
   }
 }
 
-input[type="range"] {
-    min-width: 250px;
-}
 
 .apr-stats {
     border-top: 2px solid white;
@@ -78,9 +75,6 @@ input[type="range"] {
     min-height: 100px;
 }
 
-.input-bordered {
-    min-width: 250px;
-}
 
 .chart-container {
     width: 100%;
@@ -208,7 +202,24 @@ visibility: visible;
 .chart-container{
   height: 30vw;
   width: 60vw;
-
   margin: auto;
+  justify-content: center;
+  display: flex;
 }
 }
+
+
+@media only screen and (min-width: 1500px) {
+.chart-container {
+    height: 16vw;
+    width: 34vw;
+    margin: auto;
+    justify-content: center;
+    display: flex;
+  }
+}
+
+/* img, svg, video, canvas, audio, iframe, embed, object {
+
+    margin: auto;
+} */
