@@ -219,7 +219,10 @@ visibility: visible;
   }
 }
 
-/* img, svg, video, canvas, audio, iframe, embed, object {
+.stats.stats-vertical.sm\:stats-horizontal.shadow {
+    background-color: transparent;
+}
 
-    margin: auto;
-} */
+input[type="range"] {
+    width: 60%;
+}
