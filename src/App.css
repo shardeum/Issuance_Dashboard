@@ -224,5 +224,16 @@ visibility: visible;
 }
 
 input[type="range"] {
-    width: 60%;
+    width: 50%;
+}
+
+
+@media only screen and (max-width: 450px) {
+.input-bordered {
+    width: 120px;
+}
+}
+
+main.main.py-5.px-5.md\:px-20.ml-auto.mr-auto.md\:max-w-\[75rem\] {
+    overflow: hidden;
 }
