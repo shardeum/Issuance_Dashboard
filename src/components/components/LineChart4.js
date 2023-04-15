@@ -8,6 +8,7 @@ function LineChart({chartData}) {
       }}>Monthly Reward $
 </h2>
     <Line data={chartData} options={{
+          maintainAspectRatio: false,
 
         scales: {
           x: {

@@ -5,6 +5,7 @@ function LineChart({chartData}) {
   return (<div className="chart-container">
 
     <Line data={chartData} options={{
+          maintainAspectRatio: false,
 
         scales: {
           x: {
