@@ -3,7 +3,6 @@ import React from "react";
 import {Bar} from "react-chartjs-2";
 function LineChart({chartData}) {
   return (<div className="chart-container">
-
     <Bar data={chartData} options={{
         maintainAspectRatio: false,
 
