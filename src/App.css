@@ -189,3 +189,26 @@ visibility: visible;
     background-color: black;
 
 }
+
+@media only screen and (max-width: 600px) {
+
+
+
+  .chart-container{
+    height: 80vw;
+    width: 80vw;
+    max-height:80vw;
+    margin: auto;
+  }
+
+}
+
+@media only screen and (min-width: 600px) {
+
+.chart-container{
+  height: 30vw;
+  width: 60vw;
+
+  margin: auto;
+}
+}
