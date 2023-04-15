@@ -78,7 +78,7 @@ export default function Emissions() {
     </div>
     <h2 className="text-lg font-bold pt-10">Shardeum Emissions</h2>
 
-    <p className="py-5 font-bold">The following accounts will receivie SHM immediately at genesis / mainnet launch:</p>
+    <p className="py-5 font-bold">The following accounts will receive SHM immediately at genesis / mainnet launch:</p>
     <li>Foundation account 11% of 508M; 55.88M SHM; becomes available at mainnet launch</li>
     <li>Ecosystem account 5% of 508M; 25.4M SHM; becomes available at mainnet launch</li>
     <p className="py-5 font-bold ">The following accounts will start receiving SHM 3 months (90 days) after the mainnet launch in 730 daily installments:</p>
