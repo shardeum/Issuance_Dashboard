@@ -4,21 +4,17 @@ import {Line} from "react-chartjs-2";
 function LineChart({chartData}) {
   return (<div className="chart-container">
     <Line data={chartData} options={{
-          maintainAspectRatio: false,
-
+        maintainAspectRatio: false,
         scales: {
           x: {
             beginAtZero: true,
             max: 820,
             min: 0,
-
             ticks: {
               includeBounds: true,
               beginAtZero: true,
               stepSize: 0.5
-
             },
-
             title: {
               color: 'White',
               display: true,
@@ -28,7 +24,6 @@ function LineChart({chartData}) {
               }
             }
           },
-
           y: {
             title: {
               color: 'White',
@@ -40,7 +35,6 @@ function LineChart({chartData}) {
             }
           }
         },
-
         responsive: true,
         plugins: {
           title: {

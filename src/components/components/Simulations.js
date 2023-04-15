@@ -679,7 +679,7 @@ export default class Simulations extends React.Component {
 
   render() {
 
-    return (<> < h2 > Node Reward Simulations</h2> < div className = "flex flex-wrap" > <div className="flex-1 chart min-w-[50%] pt-10">
+    return (<> <h2>Node Reward Simulations</h2> <div className="flex flex-wrap" > <div className="flex-1 chart min-w-[50%] pt-10">
 
       <div className="form-control w-full max-w-xs">
 
@@ -753,8 +753,8 @@ export default class Simulations extends React.Component {
 
       <div className="chartCard">
         <div className="chartBox">
-          <button class="btn secondary" onClick={this.onToggleChart}>Toogle View</button>
-          <div class="flex min-w-full apr-stats items-center">
+          <button className="btn secondary" onClick={this.onToggleChart}>Toogle View</button>
+          <div className="flex min-w-full apr-stats items-center">
             <div className="stats shadow">
               <div className="stat">
                 <div className="stat-title">Revenue $/day</div>
@@ -819,7 +819,7 @@ export default class Simulations extends React.Component {
             <span id="info"/>
             <canvas id="simChart"/>
           </div>
-          <button class="btn secondary" onClick={this.onDownloadPDF}>Download PDF</button>
+          <button className="btn secondary" onClick={this.onDownloadPDF}>Download PDF</button>
         </div>
       </div>
 
@@ -860,7 +860,7 @@ export default class Simulations extends React.Component {
 
       </div>
     </div>
-    <div class="flex-1 min-w-[50%] apr-stats pt-10">
+    <div className="flex-1 min-w-[50%] apr-stats pt-10">
       <h2>FDAO Controls</h2>
 
       <div className="form-control min-h-200">
@@ -913,7 +913,7 @@ export default class Simulations extends React.Component {
 
     </div>
 
-    <div class="flex-1 min-w-[50%] apr-stats">
+    <div className="flex-1 min-w-[50%] apr-stats">
       <h2 className="pt-10">FDAO Monitoring</h2>
       <div className="form-control min-h-200">
         <label className="label">
@@ -952,7 +952,7 @@ export default class Simulations extends React.Component {
 
     </div>
 
-    <div class="flex-1 min-w-[50%] apr-stats">
+    <div className="flex-1 min-w-[50%] apr-stats">
       <h2 className="pt-10">Continued...</h2>
 
       <div className="form-control min-h-200">

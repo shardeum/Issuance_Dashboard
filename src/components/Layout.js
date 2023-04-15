@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import {Helmet} from "react-helmet";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Assumptions from './pages/Assumptions';
 import Apr from './pages/Apr';
 import Emissions from './pages/Emissions';
@@ -11,6 +11,7 @@ import DrawerLayout from "./components/DrawerLayout";
 
 export default function Layout({children}) {
   return (
+    <HelmetProvider>
     <Router>
 
       <Helmet>
@@ -21,14 +22,7 @@ export default function Layout({children}) {
 
 
       <main className="main py-5 px-5 md:px-20 ml-auto mr-auto  md:max-w-[75rem]">
-<DrawerLayout/>
-
-        {/* Navigation bar */}
-
-          {/* Logo */}
-
-
-
+        <DrawerLayout/>
 
           <Routes>
               <Route exact path='/' element={<Assumptions/>}/>
@@ -38,7 +32,6 @@ export default function Layout({children}) {
               <Route path='/Parameters' element={<Parameters/>}/>
               <Route path='/Simulations' element={<Simulations/>}/>
           </Routes>
-
 
         {/* Dynamic content */}
         <div className="p-4">
@@ -67,5 +60,6 @@ export default function Layout({children}) {
 
 
       </Router>
+    </HelmetProvider>
   )
 }

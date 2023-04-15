@@ -94,7 +94,7 @@ export default class AprCalc extends React.Component {
   };
 
   render() {
-    return (<> < div class = "flex flex-wrap" > <div class="flex-1 w-50">
+    return (<> <div className="flex flex-wrap"> <div className="flex-1 w-50">
       <div className="flex-col">
         <div className="form-control min-h-200">
           <label className="label">
@@ -137,7 +137,7 @@ export default class AprCalc extends React.Component {
 
       </div>
     </div>
-    <div class="flex-1 w-50">
+    <div className="flex-1 w-50">
       <div className="form-control min-h-200">
         <label className="label">
           <span className="label-text">Network Size(active)</span>
@@ -172,7 +172,7 @@ export default class AprCalc extends React.Component {
         </div>
       </div>
     </div>
-    <div class="flex-1 min-w-full apr-stats">
+    <div className="flex-1 min-w-full apr-stats">
       <div className="stats shadow">
         <div className="stat">
           <div className="stat-title">Approx Time Validating</div>

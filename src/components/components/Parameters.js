@@ -209,7 +209,7 @@ export default class AprCalc extends React.Component {
   };
 
   render() {
-    return (<> < div class = "flex flex-wrap" > <div class="flex-1 w-50 min-w-[50%]">
+    return (<> <div className = "flex flex-wrap" > <div className="flex-1 w-50 min-w-[50%]">
       <div className="flex-col">
         <h2>Network</h2>
 
@@ -239,7 +239,7 @@ export default class AprCalc extends React.Component {
 
       </div>
     </div>
-    <div class="flex-1 w-50 min-w-[50%]">
+    <div className="flex-1 w-50 min-w-[50%]">
       <h2>FDAO Controls</h2>
 
       <div className="form-control min-h-200">
@@ -292,7 +292,7 @@ export default class AprCalc extends React.Component {
 
     </div>
 
-    <div class="flex-1 w-50 min-w-[50%] apr-stats">
+    <div className="flex-1 w-50 min-w-[50%] apr-stats">
       <h2 className="pt-10">FDAO Monitoring</h2>
       <div className="form-control min-h-200">
         <label className="label">
@@ -355,7 +355,7 @@ export default class AprCalc extends React.Component {
 
     </div>
 
-    <div class="flex-1 w-50 min-w-[50%] apr-stats">
+    <div className="flex-1 w-50 min-w-[50%] apr-stats">
       <h2 className="pt-10">Continued...</h2>
 
       <div className="form-control min-h-200">
@@ -436,7 +436,7 @@ SHM Supply = SHM Supply - SHM Delta">
       </div>
 
     </div>
-    <div class="flex-1 min-w-full apr-stats">
+    <div className="flex-1 min-w-full apr-stats">
       <h2 className="pt-10">Node Income</h2>
       <div className="stats shadow">
         <div className="stat">
@@ -488,7 +488,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
     </div>
 
-    <div class="flex-1 min-w-full">
+    <div className="flex-1 min-w-full">
       <h2 className="pt-10">Network Income</h2>
       <div className="stats shadow">
         <div className="stat">
