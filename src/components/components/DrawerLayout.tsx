@@ -115,19 +115,19 @@ function Nav() {
 
             <div className="md:hidden" id="mobile-menu">
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <NavLink to={'/Assumptions'} className={({ isActive, isPending }) =>
+            <NavLink to={'/Assumptions'}   onClick={() => {setIsOpen(!isOpen); lockScroll()}} className={({ isActive, isPending }) =>
 isPending ? "pending" : isActive ? "text-gray-300   hover:text-white block px-3 py-2 text-base font-medium active" : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>Assumptions</NavLink>
 
-                          <NavLink to={'/Emissions'} className={({ isActive, isPending }) =>
+                          <NavLink to={'/Emissions'}   onClick={() => {setIsOpen(!isOpen); lockScroll()}} className={({ isActive, isPending }) =>
 isPending ? "pending" : isActive ? "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium active" : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>Emmisions</NavLink>
 
-      <NavLink to={'/Apr'} className={({ isActive, isPending }) =>
+      <NavLink to={'/Apr'}   onClick={() => {setIsOpen(!isOpen); lockScroll()}} className={({ isActive, isPending }) =>
 isPending ? "pending" : isActive ? "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium active" : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>APR</NavLink>
 
-                <NavLink to={'/Parameters'} className={({ isActive, isPending }) =>
+                <NavLink to={'/Parameters'}   onClick={() => {setIsOpen(!isOpen); lockScroll()}} className={({ isActive, isPending }) =>
 isPending ? "pending" : isActive ? "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium active" : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>Parameters</NavLink>
 
-                  <NavLink to={'/Simulations'} className={({ isActive, isPending }) =>
+                  <NavLink to={'/Simulations'}   onClick={() => {setIsOpen(!isOpen); lockScroll()}} className={({ isActive, isPending }) =>
 isPending ? "pending" : isActive ? "text-gray-300 hover:text-white block px-3 py-2 text-base font-medium active" : "text-gray-300  hover:text-white block px-3 py-2  text-base font-medium"}>Simulations</NavLink>
               </div>
             </div>
