@@ -92,7 +92,7 @@ function Nav() {
                 ? "pending"
                 : isActive
                   ? "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium active"
-                  : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>Emmisions</NavLink>
+                  : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>Emissions</NavLink>
             <NavLink to={'/Apr'} onClick={() => {
                 setIsOpen(!isOpen);
                 lockScroll()

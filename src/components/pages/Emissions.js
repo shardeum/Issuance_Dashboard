@@ -76,7 +76,7 @@ export default function Emissions() {
       <BarChart chartData={chartData2}/>
       <PieChart plugins={[ChartDataLabels]} chartData={chartData3}/>
     </div>
-    <h2 className="text-lg font-bold pt-10">Shardeum Emmisions</h2>
+    <h2 className="text-lg font-bold pt-10">Shardeum Emissions</h2>
 
     <p className="py-5 font-bold">The following accounts will receivie SHM immediately at genesis / mainnet launch:</p>
     <li>Foundation account 11% of 508M; 55.88M SHM; becomes available at mainnet launch</li>

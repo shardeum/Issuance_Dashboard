@@ -4,7 +4,7 @@ import { Pie } from "react-chartjs-2";
 
 function PieChart({chartData, plugins}) {
   return (
-    <div className="chart-container">
+    <div className="chart-container mx-auto">
       <Pie
         data={chartData}
         plugins={plugins}

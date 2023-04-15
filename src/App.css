@@ -219,7 +219,7 @@ visibility: visible;
   }
 }
 
-.stats.stats-vertical.sm\:stats-horizontal.shadow {
+.stats-vertical.sm\:stats-horizontal.shadow {
     background-color: transparent;
 }
 
@@ -234,6 +234,6 @@ input[type="range"] {
 }
 }
 
-main.main.py-5.px-5.md\:px-20.ml-auto.mr-auto.md\:max-w-\[75rem\] {
+.main.py-5.px-5.md\:px-20.ml-auto.mr-auto.md\:max-w-\[75rem\] {
     overflow: hidden;
 }
