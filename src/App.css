@@ -168,3 +168,24 @@ visibility: visible;
   height: unset;
 
 }
+
+.opacity-100 {
+    opacity: 1;
+    height: 100vh;
+    /* position: unset; */
+    overflow: hidden;
+    /* position: absolute; */
+    touch-action: none;
+}
+
+.lock-scroll {
+  overflow: hidden;
+    height: 100vh;
+}
+
+.burger {
+
+  border: 1px solid white;
+    background-color: black;
+
+}
