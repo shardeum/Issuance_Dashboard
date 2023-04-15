@@ -20,7 +20,7 @@ export default function Layout({children}) {
       </Helmet>
 
 
-      <main className="main py-10 px-20 ml-auto mr-auto max-w-[75rem]">
+      <main className="main py-5 px-5 md:px-20 ml-auto mr-auto  md:max-w-[75rem]">
 <DrawerLayout/>
 
         {/* Navigation bar */}
@@ -51,14 +51,14 @@ export default function Layout({children}) {
 
 
       </main>
-      <div className="w-[26rem] h-[28rem] absolute top-32 right-0 -z-10" style={{
+      <div className="w-[13rem] h-[14rem] sm:w-[26rem] sm:h-[28rem] absolute top-32 right-0 -z-10" style={{
               'background':
                 'radial-gradient(circle at right 20% bottom 40%, purple, transparent 50%),' +
                 'radial-gradient(circle at right 20% top 40%, blue, transparent 50%)',
               opacity: 0.7
             }}></div>
 
-          <div className="background-flip w-[26rem] h-[28rem] absolute bottom-0 left-0 -z-10" style={{
+          <div className="background-flip  w-[13rem] h-[14rem] sm:w-[26rem] sm:h-[28rem] absolute bottom-0 left-0 -z-10" style={{
                     'background':
                       'radial-gradient(circle at right 20% bottom 40%, purple, transparent 50%),' +
                       'radial-gradient(circle at right 20% top 40%, blue, transparent 50%)',

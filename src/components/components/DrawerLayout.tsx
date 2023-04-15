@@ -14,19 +14,19 @@ function Nav() {
   const ref = useRef<HTMLDivElement>(null);
   return (
     <div>
-      <nav className="text-gray-400 py-2">
-        <div className="max-w-7xl mx-auto">
-                            <div className="flex pb-5">
+      <nav className="text-gray-400 border-b-2 border-b-gray-500 sm:border-b-0">
+        <div className="max-w-7xl mx-auto flex justify-between items-center sm:flex-col sm:items-start">
+                            <div className="flex">
                               <img src="logo.png" alt="Logo" className="w-40"/>
 
                             </div>
 
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20 sm:w-full">
             <div className="flex-1 items-center">
 
               <div className="hidden md:block flex flex-direction-column">
 
-              <ul className="flex-grow flex mb-3 mt-10 border-b-2 border-b-gray-500 h-10 items-stretch">
+              <ul className="flex-grow flex mb-3 mt-10 border-b-2 border-b-gray-500 h-10 items-stretch sm:mb-10">
 
 
                     <NavLink to={'/Assumptions'} className={({ isActive, isPending }) =>
