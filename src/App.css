@@ -196,7 +196,7 @@ visibility: visible;
   }
 
   .stat-desc {
-      font-size: 8px;
+      font-size: 6px;
   }
 
   /* .chartBox {
@@ -261,7 +261,7 @@ input[type="range"] {
 }
 
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 350px) {
 .input-bordered {
     width: 120px;
 }

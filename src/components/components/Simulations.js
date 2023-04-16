@@ -681,7 +681,7 @@ export default class Simulations extends React.Component {
 
     return (<>
 
-      <h2 pt-5>Node Reward Simulations</h2>
+      <h2 className="pt-5">Node Reward Simulations</h2>
       <div className="flex flex-wrap pt-5" >
 
     <div className="flex flex-col chart min-w-[50%]">
@@ -758,11 +758,11 @@ export default class Simulations extends React.Component {
 
       <div className="chartCard">
         <div className="chartBox">
-          <button className="btn secondary" onClick={this.onToggleChart}>Toogle View</button>
+          <button className="btn secondary hidden sm:block " onClick={this.onToggleChart}>Toogle View</button>
           <div className="flex-1 min-w-full apr-stats items-center">
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Revenue $/day</div>
+                <div className="stat-title">Revenue/day</div>
                 <div className="stat-value">
                   {"$" + this.state.RevenuePerDay.toFixed(2)}
                 </div>
@@ -774,7 +774,7 @@ export default class Simulations extends React.Component {
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Expense $/day</div>
+                <div className="stat-title">Expense/day</div>
                 <div className="stat-value">
                   {"$" + this.state.ExpensePerDay.toFixed(2)}
                 </div>
@@ -786,7 +786,7 @@ export default class Simulations extends React.Component {
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Income $/day</div>
+                <div className="stat-title">Income/day</div>
                 <div className="stat-value">
                   {"$" + this.state.IncomePerDay.toFixed(2)}
                 </div>
@@ -798,7 +798,7 @@ export default class Simulations extends React.Component {
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">APY %/year</div>
+                <div className="stat-title">APY/year</div>
                 <div className="stat-value">
                   {this.state.APYPerYear.toFixed(0) + "%"}
                 </div>
