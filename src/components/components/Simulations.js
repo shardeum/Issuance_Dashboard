@@ -199,7 +199,7 @@ export default class Simulations extends React.Component {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        aspectRatio: 1,
+        aspectRatio: 2,
         plugins: {
           title: {
             display: true,
@@ -642,6 +642,8 @@ export default class Simulations extends React.Component {
     } else {
       window.myChart.config._config.options.maintainAspectRatio = true;
     }
+
+    document.querySelector(".holder").classList.toggle('open');
     window.myChart.update()
 
   }

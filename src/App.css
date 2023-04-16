@@ -95,7 +95,14 @@ li.li-right{
   background-color: #1B31D3;
 }
 
+
 .holder {
+
+  height: 50vh;
+  width: 60vw;
+}
+
+.holder.open {
 
   height: calc(100% - 170px);
   width: 100%;
@@ -184,73 +191,7 @@ visibility: visible;
 
 }
 
-@media only screen and (max-width: 600px) {
 
-
-
-  .chart-container{
-    height: 80vw;
-    width: 90vw;
-    max-height:80vw;
-    margin: auto;
-  }
-
-  .stat-desc {
-      font-size: 6px;
-  }
-
-  /* .chartBox {
-    height: 80vw;
-    width: 90vw;
-    max-height:80vw;
-    margin: auto;
-
-  } */
-
-}
-
-@media only screen and (min-width: 600px) {
-
-.chart-container{
-  height: 30vw;
-  width: 60vw;
-  margin: auto;
-  justify-content: center;
-  display: flex;
-}
-
-/* .chartBox {
-  height: 30vw;
-  width: 60vw;
-  margin: auto;
-  justify-content: center;
-  display: flex;
-
-} */
-
-}
-
-
-@media only screen and (min-width: 1500px) {
-.chart-container {
-    height: 16vw;
-    width: 34vw;
-    margin: auto;
-    justify-content: center;
-    display: flex;
-  }
-/*
-  .simChart {
-    height: 16vw;
-    width: 34vw;
-    margin: auto;
-    justify-content: center;
-    display: flex;
-
-
-  } */
-
-}
 
 .stats-vertical.sm\:stats-horizontal.shadow {
     background-color: transparent;
@@ -282,4 +223,49 @@ input[type="range"] {
 
 .stats.shadow {
     background: none;
+}
+
+
+
+
+@media only screen and (max-width: 600px) {
+
+
+
+  .chart-container{
+    height: 80vw;
+    width: 90vw;
+    max-height:80vw;
+    margin: auto;
+  }
+
+  .stat-desc {
+      font-size: 6px;
+  }
+
+  .stat-value {
+    font-size: 1.7rem;
+}
+
+.holder {
+
+  height: 40vh;
+  width: 80vw;
+    margin: auto;
+}
+
+
+}
+
+@media only screen and (min-width: 600px) {
+
+.chart-container{
+  height: 30vh;
+  width: 40vw;
+  margin: auto;
+  justify-content: center;
+  display: flex;
+}
+
+
 }

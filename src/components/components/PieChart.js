@@ -11,15 +11,19 @@ function PieChart({chartData, plugins}) {
         options={{
            plugins: {
 
+
+
             title: {
               display: true,
               text: "SHM Distribution Percentage"
             },
             datalabels: {
                 display: true,
+
                 font: {
-                       size: 12,
-                       weight: 'bold'
+                       size: 8,
+                       weight: '900',
+
                    },
                 formatter: (value, ctx) => {
 
