@@ -16,21 +16,17 @@ a {
 }
 
 a.nav-link {
-    min-width: 120px;
-    text-align: center;
+  min-width: 120px;
+  text-align: center;
 }
 
-
 a.active {
-
-border-bottom: white solid 2px;
-
-
+  border-bottom: white solid 2px;
 }
 
 .background-flip {
--webkit-transform: scaleX(-1);
- transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
 * {
@@ -41,95 +37,82 @@ border-bottom: white solid 2px;
   html {
     color-scheme: dark;
   }
+
   body {
     color: white;
     background: black;
   }
 }
 
-li.li-right{
+li.li-right {
   float: right;
 }
 
-.spinner{
+.spinner {
   animation: rotateMe 2s infinite;
 }
-
 
 @keyframes rotateMe {
   0% {
     transform: rotate(-360deg);
   }
+
   100% {
     transform: rotate(0);
   }
 }
 
-
 .apr-stats {
-    border-top: 2px solid white;
-    margin-top: 10px;
+  border-top: 2px solid white;
+  margin-top: 10px;
 }
 
 .min-h-200 {
-    min-height: 100px;
+  min-height: 100px;
 }
-
 
 .chart-container {
-    width: 100%;
+  width: 100%;
 }
 
-
 .cursor-pointer {
-    width: max-content;
+  width: max-content;
 }
 
 .customLabel {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .btn {
-
-
   background-color: #1B31D3;
 }
 
-
 .holder {
-
   height: 50vh;
   width: 60vw;
 }
 
 .holder.open {
-
   height: calc(100% - 170px);
   width: 100%;
 }
-
-
 
 .chartBox {
   width: auto;
   height: auto;
   position: unset;
   display: none;
-
-
 }
 
 .flip-background-image {
   -webkit-transform: scaleX(-1);
-transform: scaleX(-1);
-background-repeat: repeat-y
+  transform: scaleX(-1);
+  background-repeat: repeat-y
 }
-
 
 background-image {
   background-repeat: repeat-y
 }
-
 
 .chartBox.fullScreen {
   width: 100%;
@@ -141,131 +124,114 @@ background-image {
   background: black;
   overflow: hidden;
   display: block;
-
 }
 
-
 body::-webkit-scrollbar {
-    display: none; /* for Chrome, Safari, and Opera */
+  display: none;
+  /* for Chrome, Safari, and Opera */
 }
 
 .flex-1.chart {
   width: 100%;
-     width: -moz-available;          /* WebKit-based browsers will ignore this. */
-     width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  width: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
 }
 
-.FileHidden{
-visibility: collapse;
+.FileHidden {
+  visibility: collapse;
   opacity: 0;
   transition: visibility 0.5s, opacity 1.5s linear;
   height: 0;
 }
 
-.FileShown{
-visibility: visible;
+.FileShown {
+  visibility: visible;
   opacity: 1;
   transition: visibility 0.5s, opacity 1.5s linear;
   height: unset;
-
 }
 
 .opacity-100 {
-    opacity: 1;
-    height: 100vh;
-    /* position: unset; */
-    overflow: hidden;
-    /* position: absolute; */
-    touch-action: none;
+  opacity: 1;
+  height: 100vh;
+  /* position: unset; */
+  overflow: hidden;
+  /* position: absolute; */
+  touch-action: none;
 }
 
 .lock-scroll {
   overflow: hidden;
-    height: 100vh;
+  height: 100vh;
 }
 
 .burger {
-
   border: 1px solid white;
-    background-color: black;
-
+  background-color: black;
 }
 
-
-
 .stats-vertical.sm\:stats-horizontal.shadow {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 input[type="range"] {
-    width: 50%;
+  width: 50%;
 }
-
 
 @media only screen and (max-width: 350px) {
-.input-bordered {
+  .input-bordered {
     width: 120px;
-}
+  }
 }
 
 .main.py-5.px-5.md\:px-20.ml-auto.mr-auto.md\:max-w-\[75rem\] {
-    overflow: hidden;
+  overflow: hidden;
 }
-
 
 .stat.shm {
-    height: 100px;
-    padding-top: 0rem;
+  height: 100px;
+  padding-top: 0rem;
 }
+
 .btn {
   max-width: fit-content;
 }
 
 .stats.shadow {
-    background: none;
+  background: none;
 }
 
-
-
-
 @media only screen and (max-width: 600px) {
-
-
-
-  .chart-container{
+  .chart-container {
     height: 80vw;
     width: 90vw;
-    max-height:80vw;
+    max-height: 80vw;
     margin: auto;
   }
 
   .stat-desc {
-      font-size: 6px;
+    font-size: 6px;
   }
 
   .stat-value {
     font-size: 1.7rem;
-}
+  }
 
-.holder {
-
-  height: 40vh;
-  width: 80vw;
+  .holder {
+    height: 40vh;
+    width: 80vw;
     margin: auto;
-}
-
-
+  }
 }
 
 @media only screen and (min-width: 600px) {
-
-.chart-container{
-  height: 30vh;
-  width: 40vw;
-  margin: auto;
-  justify-content: center;
-  display: flex;
-}
-
-
+  .chart-container {
+    height: 25rem;
+    width: 100%;
+    margin: auto;
+    justify-content: center;
+    display: flex;
+  }
 }
