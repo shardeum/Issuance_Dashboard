@@ -810,12 +810,12 @@ export default class Simulations extends React.Component {
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Max Supply Reached</div>
+                <div className="stat-title">Peak SHM Supply</div>
                 <div className="stat-value">
                   {this.getNumber(this.state.MaxSHMReached)}
                 </div>
                 <div className="stat-desc">
-                  Max SHM Supply
+                  Max(all daily supply)
                 </div>
               </div>
             </div>
