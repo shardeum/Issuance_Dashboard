@@ -195,6 +195,18 @@ visibility: visible;
     margin: auto;
   }
 
+  .stat-desc {
+      font-size: 10px;
+  }
+
+  /* .chartBox {
+    height: 80vw;
+    width: 90vw;
+    max-height:80vw;
+    margin: auto;
+
+  } */
+
 }
 
 @media only screen and (min-width: 600px) {
@@ -206,6 +218,16 @@ visibility: visible;
   justify-content: center;
   display: flex;
 }
+
+/* .chartBox {
+  height: 30vw;
+  width: 60vw;
+  margin: auto;
+  justify-content: center;
+  display: flex;
+
+} */
+
 }
 
 
@@ -217,6 +239,17 @@ visibility: visible;
     justify-content: center;
     display: flex;
   }
+/*
+  .simChart {
+    height: 16vw;
+    width: 34vw;
+    margin: auto;
+    justify-content: center;
+    display: flex;
+
+
+  } */
+
 }
 
 .stats-vertical.sm\:stats-horizontal.shadow {
@@ -228,7 +261,7 @@ input[type="range"] {
 }
 
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 400px) {
 .input-bordered {
     width: 120px;
 }
@@ -236,4 +269,17 @@ input[type="range"] {
 
 .main.py-5.px-5.md\:px-20.ml-auto.mr-auto.md\:max-w-\[75rem\] {
     overflow: hidden;
+}
+
+
+.stat.shm {
+    height: 100px;
+    padding-top: 0rem;
+}
+.btn {
+  max-width: fit-content;
+}
+
+.stats.shadow {
+    background: none;
 }

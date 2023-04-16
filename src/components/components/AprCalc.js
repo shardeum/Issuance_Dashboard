@@ -94,7 +94,7 @@ export default class AprCalc extends React.Component {
   };
 
   render() {
-    return (<> <div className="flex flex-wrap"> <div className="flex-1 w-50">
+    return (<> <div className="flex flex-wrap pt-5"> <div className="flex-1 w-50">
       <div className="flex-col">
         <div className="form-control min-h-200">
           <label className="label">
@@ -110,7 +110,7 @@ export default class AprCalc extends React.Component {
         </div>
 
         <div className="stats stats-vertical sm:stats-horizontal shadow min-h-200">
-          <div className="stat">
+          <div className="stat shm">
             <div className="stat-title">Approx SHM Issued per Month</div>
             <div className="stat-value">{this.state.SHMperDay * 30}
               SHM</div>

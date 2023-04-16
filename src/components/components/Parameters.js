@@ -209,7 +209,7 @@ export default class AprCalc extends React.Component {
   };
 
   render() {
-    return (<> <div className = "flex flex-wrap" > <div className="flex-1 w-50 min-w-[50%]">
+    return (<> <div className = "flex flex-wrap pt-5" > <div className="flex w-50 min-w-[50%]">
       <div className="flex-col">
         <h2>Network</h2>
 
@@ -239,7 +239,7 @@ export default class AprCalc extends React.Component {
 
       </div>
     </div>
-    <div className="flex-1 w-50 min-w-[50%]">
+    <div className="flex flex-col w-50 min-w-[50%]">
       <h2>FDAO Controls</h2>
 
       <div className="form-control min-h-200">
@@ -292,7 +292,7 @@ export default class AprCalc extends React.Component {
 
     </div>
 
-    <div className="flex-1 w-50 min-w-[50%] apr-stats">
+    <div className="flex flex-col w-50 min-w-[50%] apr-stats">
       <h2 className="pt-10">FDAO Monitoring</h2>
       <div className="form-control min-h-200">
         <label className="label">
@@ -355,7 +355,7 @@ export default class AprCalc extends React.Component {
 
     </div>
 
-    <div className="flex-1 w-50 min-w-[50%] apr-stats">
+    <div className="flex flex-col w-50 min-w-[50%] apr-stats">
       <h2 className="pt-10">Continued...</h2>
 
       <div className="form-control min-h-200">
