@@ -440,7 +440,7 @@ SHM Supply = SHM Supply - SHM Delta">
       <h2 className="pt-10">Node Income</h2>
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">Revenue $/day</div>
+          <div className="stat-title">Revenue/day</div>
           <div className="stat-value">
             {"$" + this.state.RevenuePerDay.toFixed(2)}
           </div>
@@ -452,7 +452,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">Expense $/day</div>
+          <div className="stat-title">Expense/day</div>
           <div className="stat-value">
             {"$" + this.state.ExpensePerDay.toFixed(2)}
           </div>
@@ -464,7 +464,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">Income $/day</div>
+          <div className="stat-title">Income/day</div>
           <div className="stat-value">
             {"$" + this.state.IncomePerDay.toFixed(2)}
           </div>
@@ -476,7 +476,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">APY %/year</div>
+          <div className="stat-title">APY/year</div>
           <div className="stat-value">
             {this.state.APYPerYear.toFixed(2) + "%"}
           </div>
@@ -492,7 +492,7 @@ SHM Supply = SHM Supply - SHM Delta">
       <h2 className="pt-10">Network Income</h2>
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">Revenue $/day</div>
+          <div className="stat-title">Revenue/day</div>
           <div className="stat-value">
             {"$" + this.state.NetworkRevenuePerDay.toFixed(0)}
           </div>
@@ -504,7 +504,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">Expense $/day</div>
+          <div className="stat-title">Expense/day</div>
           <div className="stat-value">
             {"$" + this.state.NetworkExpensePerDay.toFixed(0)}
           </div>
@@ -516,7 +516,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">Income $/day</div>
+          <div className="stat-title">Income/day</div>
           <div className="stat-value">
             {"$" + this.state.NetworkIncomePerDay.toFixed(0)}
           </div>
@@ -528,7 +528,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
       <div className="stats shadow">
         <div className="stat">
-          <div className="stat-title">SHM Delta SHM/day</div>
+          <div className="stat-title">Delta SHM/day</div>
           <div className="stat-value">
             {this.state.NetworkDeltaPerDay.toFixed(0) + "SHM"}
           </div>
