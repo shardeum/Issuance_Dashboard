@@ -12,12 +12,13 @@ function LineChart({chartData}) {
             title: {
               color: 'White',
               display: true,
-              text: 'Validator:Standby Ratio',
+              text: 'Standby:Active Validator (S:A) Ratio',
               border: {
                 color: 'white'
               }
             }
           },
+
 
           y: {
 
@@ -25,7 +26,8 @@ function LineChart({chartData}) {
                 // Include a dollar sign in the ticks
                 callback: function(value, index, ticks) {
                     return '$' + value;
-                }
+                },
+                 display: false
             },
             title: {
               color: 'White',
@@ -45,16 +47,19 @@ function LineChart({chartData}) {
                 grid: {
                   drawOnChartArea: false, // only want the grid lines for one axis to show up
                 },
-                ticks: {
+                ticks:
+                 {
                     // Include a dollar sign in the ticks
                     callback: function(value, index, ticks) {
                         return '$' + value;
-                    }
+                    },
+
+                     display: false
                 },
                 title: {
                   color: 'White',
                   display: true,
-                  text: 'SHM Price $',
+                  text: 'Node Reward $/hr',
                   border: {
                     color: 'white'
                   }
@@ -66,6 +71,7 @@ function LineChart({chartData}) {
         responsive: true,
         plugins: {
           tooltip: {
+              enabled: false,
               callbacks: {
                   label: function(context) {
                       let label = context.dataset.label || '';
@@ -82,7 +88,7 @@ function LineChart({chartData}) {
           },
           title: {
             display: true,
-            text: "Validator:Standby Ratio vs SHM Price $"
+            text: "Standby:Active Validator (S:A) Ratio vs Node Reward $/hr vs Network Operating Cost"
           },
           legend: {
             display: true

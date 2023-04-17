@@ -18,7 +18,7 @@ function LineChart({chartData}) {
             title: {
               color: 'White',
               display: true,
-              text: 'Days since genesis',
+              text: 'Days Since Genesis',
               border: {
                 color: 'white'
               }

@@ -239,7 +239,7 @@ export default class AprCalc extends React.Component {
 
       <div className="stats stats-vertical sm:stats-horizontal shadow">
         <div className="stat">
-          <div className="stat-title">APR</div>
+          <div className="stat-title">APY</div>
           <div className="stat-value">{this.state.Apr.toFixed(0)}%</div>
           <div className="stat-desc">
             **based on math only, not real world scenario

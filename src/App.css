@@ -235,3 +235,19 @@ input[type="range"] {
     display: flex;
   }
 }
+
+@media only screen and (min-width: 1660px) {
+.holder {
+    height: 40vh;
+    width: 40vw;
+}
+}
+
+
+
+.StabilityFactor {
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 10px;
+}

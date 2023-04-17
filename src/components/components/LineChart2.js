@@ -22,7 +22,7 @@ function LineChart({chartData}) {
             title: {
               color: 'White',
               display: true,
-              text: 'Validator:Standby Ratio',
+              text: 'Standby:Active Validator (S:A) Ratio',
               border: {
                 color: 'white'
               }
@@ -33,7 +33,7 @@ function LineChart({chartData}) {
             title: {
               color: 'White',
               display: true,
-              text: 'Total Network Nodes',
+              text: 'Time Validating %',
               border: {
                 color: 'white'
               }
@@ -41,7 +41,7 @@ function LineChart({chartData}) {
           },
           y1: {
                type: 'linear',
-               display: true,
+               display: false,
                position: 'right',
 
                // grid line settings
@@ -63,7 +63,7 @@ function LineChart({chartData}) {
         plugins: {
           title: {
             display: true,
-            text: "Validator:Standby Ratio vs Time Validating %"
+            text: "Standby:Active Validator (S:A) Ratio vs Time Validating %"
           },
           legend: {
             display: true

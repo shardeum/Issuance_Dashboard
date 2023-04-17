@@ -30,12 +30,12 @@ function Nav() {
                     : isActive
                       ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active"
                       : "nav-link px-5 -mb-0.5 text-white px-5"}>Emissions</NavLink>
-                <NavLink to={'/Apr'} className={(
+                <NavLink to={'/Apy'} className={(
                     {isActive, isPending}) => isPending
                     ? "pending"
                     : isActive
                       ? "nav-link border-b-2 border-b-white px-5 -mb-0.5 text-white px-5 active"
-                      : "nav-link px-5 -mb-0.5 text-white px-5"}>APR</NavLink>
+                      : "nav-link px-5 -mb-0.5 text-white px-5"}>APY</NavLink>
                 <NavLink to={'/Parameters'} className={(
                     {isActive, isPending}) => isPending
                     ? "pending"
@@ -93,7 +93,7 @@ function Nav() {
                 : isActive
                   ? "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium active"
                   : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>Emissions</NavLink>
-            <NavLink to={'/Apr'} onClick={() => {
+            <NavLink to={'/Apy'} onClick={() => {
                 setIsOpen(!isOpen);
                 lockScroll()
               }} className={(
@@ -101,7 +101,7 @@ function Nav() {
                 ? "pending"
                 : isActive
                   ? "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium active"
-                  : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>APR</NavLink>
+                  : "text-gray-300   hover:text-white block px-3 py-2  text-base font-medium"}>APY</NavLink>
             <NavLink to={'/Parameters'} onClick={() => {
                 setIsOpen(!isOpen);
                 lockScroll()
