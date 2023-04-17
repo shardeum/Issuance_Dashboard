@@ -1,5 +1,4 @@
 import React from "react";
-import RangeSlider from "./assets/range-slider.js";
 
 export default class StabilityFactor extends React.Component {
   state = {
