@@ -21,7 +21,7 @@ function PieChart({chartData, plugins}) {
                 display: true,
 
                 font: {
-                       size: 8,
+                       size: 10,
                        weight: '900',
 
                    },
@@ -33,7 +33,14 @@ function PieChart({chartData, plugins}) {
                   return sum += data;
                   });
                   let percentage = (value*100 / sum).toFixed(2)+"%";
+
+                  if (percentage === "51.00%") {
+                    let percentage = "51% (Max Available)"
+                    return percentage
+                  }
+                  else {
                   return percentage;
+                }
 
                 },
                 color: '#fff',

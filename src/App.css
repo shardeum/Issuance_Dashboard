@@ -16,7 +16,7 @@ a {
 }
 
 a.nav-link {
-  min-width: 120px;
+  min-width: 150px;
   text-align: center;
 }
 
@@ -88,8 +88,7 @@ li.li-right {
 }
 
 .holder {
-  height: 50vh;
-  width: 60vw;
+
 }
 
 .holder.open {
@@ -219,11 +218,6 @@ input[type="range"] {
     font-size: 1.7rem;
   }
 
-  .holder {
-    height: 40vh;
-    width: 80vw;
-    margin: auto;
-  }
 }
 
 @media only screen and (min-width: 600px) {
@@ -237,10 +231,7 @@ input[type="range"] {
 }
 
 @media only screen and (min-width: 1660px) {
-.holder {
-    height: 40vh;
-    width: 40vw;
-}
+
 }
 
 
@@ -250,4 +241,11 @@ input[type="range"] {
     border-radius: 20px;
     padding: 20px;
     margin: 10px;
+}
+
+
+.bug.flex-1.self-center.text-right {
+    text-decoration: underline;
+    color: white;
+    font-size: 12px;
 }

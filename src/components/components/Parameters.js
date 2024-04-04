@@ -31,6 +31,9 @@ export default class AprCalc extends React.Component {
     CustomDisabled: true
   };
 
+
+
+
   componentDidMount() {
     this.setState({
       AvgTxFee: this.state.TXfees * 2,
@@ -209,7 +212,11 @@ export default class AprCalc extends React.Component {
   };
 
   render() {
-    return (<> <div className = "flex flex-wrap pt-5" > <div className="flex w-50 min-w-[50%]">
+    return (<> 
+
+     
+
+      <div className = "flex flex-wrap pt-5 sm:pt-0"> <div className="flex w-50 min-w-[50%]">
       <div className="flex-col">
         <h2>Network</h2>
 
@@ -394,7 +401,7 @@ If Standby ratio < 1 then set it to 1
 
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">Sever Rent $/hr</span>
+          <span className="label-text">Server Rent $/hr</span>
         </label>
         <div className="tooltip" data-tip="On Linode.com $0.20/hr gets
 8 core

@@ -12,7 +12,7 @@ module.exports = {
         themes: [
             {
                 black: {
-                    ...require("daisyui/src/colors/themes")["[data-theme=black]"],
+                    ...require("daisyui/src/theming/themes")["black"],
                     primary: "#1d4ed8",
                     "primary-focus": "#1d4ed8",
                     error: "#ef4444",

@@ -5,7 +5,7 @@ export const DistributionData = [
    "Percentage": "11"
  },
  {
-   "Distribution": "Ecosystem",
+   "Distribution": "Ecosystem & Airdrops",
    "SHM": 25400000,
    "Percentage": "5"
  },

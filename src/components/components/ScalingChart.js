@@ -1,10 +1,9 @@
 // components/LineChart.js
 import React from "react";
 import {Line} from "react-chartjs-2";
-function LineChart({chartData}) {
+function ScalingChart({chartData}) {
   return (<div className="chart-container">
     <Line data={chartData} options={{
-
           maintainAspectRatio: false,
 
         scales: {
@@ -13,56 +12,48 @@ function LineChart({chartData}) {
             title: {
               color: 'White',
               display: true,
-              text: 'Standby:Active Validator (S:A) Ratio',
+              text: 'Days Since Genesis',
               border: {
                 color: 'white'
               }
             }
           },
+
 
           y: {
 
             ticks: {
                 // Include a dollar sign in the ticks
                 callback: function(value, index, ticks) {
-                    return '$' + value;
+                    return value;
                 },
-
-                display: false
+                 display: true
             },
             title: {
               color: 'White',
               display: true,
-              text: 'Node Reward Monthly $',
+              text: 'Reward %',
               border: {
                 color: 'white'
               }
             }
           },
 
+
+
+
+
         },
 
         responsive: true,
         plugins: {
           tooltip: {
-            enabled: true,
-              callbacks: {
-                  label: function(context) {
-                      let label = context.dataset.label || '';
+              enabled: true,
 
-                      if (label) {
-                          label += ': ';
-                      }
-                      if (context.parsed.y !== null) {
-                          label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                      }
-                      return label;
-                  }
-              }
           },
           title: {
             display: true,
-            text: "Standby:Active Validator (S:A) Ratio vs Node Reward $/hr"
+            text: "Scaling vs Linear Pre-defined Issuance Example"
           },
           legend: {
             display: true
@@ -75,4 +66,4 @@ function LineChart({chartData}) {
       }}/>
   </div>);
 }
-export default LineChart;
+export default ScalingChart;

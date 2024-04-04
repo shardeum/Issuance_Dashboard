@@ -11,7 +11,6 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-
 import EthereumPrice from ".././components/SimData/eth-price.txt";
 import EthereumTX from ".././components/SimData/eth-tx-vol.txt";
 import AlgorandPrice from ".././components/SimData/algo-price.txt";
@@ -20,20 +19,27 @@ import BSCPrice from ".././components/SimData/bnb-price.txt";
 import BSCTX from ".././components/SimData/bsc-tx-vol.txt";
 import PolygonPrice from ".././components/SimData/matic-price.txt";
 import PolygonTX from ".././components/SimData/poly-tx-vol.txt";
+import {EmmisionsData} from '.././components/EmmisionsData.js';
+import RangeSlider from "./assets/range-slider.js";
+
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export default class Simulations extends React.Component {
+
+
+
+
+export default class Security extends React.Component {
   state = {
     NodeTPS: 2,
-    Nodes: 600,
+    Nodes: 1200,
     NodesPerShard: 120,
     NetworkTPS: 20,
     TXfees: 0.01,
     NodeRewardPerHour: 1,
     Stake: 1000,
     StabilityFactor: 1,
-    SHMValue: 1,
+    SHMValue: 2,
     AvgTxFee: 0,
     ActiveNodes: 0,
     SeverRentPerHour: 0.2,
@@ -49,7 +55,7 @@ export default class Simulations extends React.Component {
     NetworkExpensePerDay: 0,
     NetworkIncomePerDay: 0,
     NetworkDeltaPerDay: 0,
-    MinNodes: 600,
+    MinNodes: 1200,
     CustomTXChecked: false,
     CustomDisabled: true,
     CustomPriceFileChecked: false,
@@ -58,8 +64,30 @@ export default class Simulations extends React.Component {
     CustomTXFileDisabled: false,
     priceData: [],
     txvolData: [],
-    MaxSHMReached: 0
+    emissionsData: EmmisionsData.map(e => e.TotalLiquid_SHM),
+    MaxSHMReached: 0,
+    totalLiquidSHM: [],
+    totalLockedSHM: [],
+    ActiveNodesPerDay:[],
+    SHMPricePerDay: [],
+    Day:1,
+    priceMultiplier: 1,
+    transactionMultiplier: 1,
+    acquisitionMultiplier: 1,
+    acquisitionRate: 50,
+    acquisitionPrice: 2,
+    attackThreshold : 66,
+    currentTotalNodes: 0,
+    newTotalNodes: 0,
+    additionalNodesRequired: 0,
+    diluteNodesRequired: 0,
+    totalNewNodesRequired: 0,
+    attackCost: 0,
+
+
   };
+
+
 
   onCustomPriceFileCheckedChange = (event) => {
     this.setState({
@@ -83,6 +111,26 @@ export default class Simulations extends React.Component {
 
   };
 
+    onSliderChange = (event) => {
+    this.setState({
+      Day: event.target.value
+    });
+  };
+
+      onAcqusitionSliderChange = (event) => {
+    this.setState({
+      acquisitionRate: event.target.value
+    });
+  };
+
+       onAttackSliderChange = (event) => {
+    this.setState({
+      attackThreshold: event.target.value
+    });
+  };
+
+
+
   onDrawChart = (event) => {
 
     // the amount of data points for price and tx volume may be different.
@@ -101,31 +149,39 @@ export default class Simulations extends React.Component {
       return;
     }
 
-     let priceData = [...this.state.priceData].splice(0, minData) 
+    let priceData = [...this.state.priceData].splice(0, minData) 
     let txvolData = [...this.state.txvolData].splice(0, minData)
+    let emissionsData = [...this.state.emissionsData]
 
-
-
+    console.log(priceData)
+    console.log(txvolData)
 
     const canvas = document.getElementById('simChart');
     const ctx = canvas.getContext('2d');
 
     if (window.myChart) {
       window.myChart.destroy();
+      window.myChart2.destroy();
+      window.myChart3.destroy();
     }
 
     const priceDataset = priceData.map((value, index) => {
-      return {x: index, y: value};
+      return {x: index, y: value * this.state.priceMultiplier};
 
     });
     const txvolDataset = txvolData.map((value, index) => {
+      return {x: index, y: value * this.state.transactionMultiplier};
+    });
+
+       const liquidDataset = emissionsData.map((value, index) => {
       return {x: index, y: value};
     });
 
     const activeDataset = txvolData.map((value, index) => {
+      const sum = value * this.state.transactionMultiplier;
       return {
         x: index,
-        y: Math.max(this.state.MinNodes, value / 86400 / this.state.TPSPerNode * this.state.NodesPerShard)
+        y: Math.max(this.state.MinNodes, sum / 86400 / this.state.TPSPerNode * this.state.NodesPerShard)
       };
     });
 
@@ -161,10 +217,43 @@ export default class Simulations extends React.Component {
 
     });
 
+
+
+    const totalLiquidDataset = liquidDataset.map((value, index) => {
+    // Sum the y values at the current index from both arrays
+    const sum = value.y + shmsupDataset[index].y;
+    
+    // Return an object with the sum
+    return { x: index, y: sum };
+});
+
+
+
     this.setState({
       MaxSHMReached: Math.max(...shmsupDataset.map(o => o.y))
 
     })
+
+
+   this.setState({
+    totalLiquidSHM: totalLiquidDataset.map(o => o.y)
+
+    })
+
+     this.setState({
+    ActiveNodesPerDay: activeDataset.map(o => o.y)
+
+    })
+
+
+         this.setState({
+    SHMPricePerDay: priceDataset.map(o => o.y)
+
+    })
+
+
+
+ 
 
     document.querySelector(".chartBox").style.display = "block";
 
@@ -172,6 +261,160 @@ export default class Simulations extends React.Component {
       type: 'line',
       data: {
         datasets: [
+
+          {
+            label: 'Liquid SHM Business',
+            data: liquidDataset,
+            borderColor: 'rgb(132, 99, 255)',
+            tension: 1,
+            yAxisID: 'y-totalLidquid'
+          },
+
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        aspectRatio: 1,
+        plugins: {
+          title: {
+            display: true,
+            text: "Liquid SHM Business"
+          },
+          legend: {
+            display: true
+          },
+          colors: {
+            enabled: true
+          }
+        },
+        scales: {
+          x: {
+            display: true,
+            type: 'linear',
+            title: {
+              display: true,
+              text: 'Days Since Genesis'
+            },
+            min: 0,
+            max: 820,
+            ticks: {
+              callback: (value, index, values) => {
+                return value.toFixed(0);
+              }
+            }
+          },
+         
+               'y-totalLidquid': {
+            display: true,
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Total Liquid Supply'
+            },
+            min: 0,
+    
+          
+          }
+        }
+      }
+    });
+
+
+        
+
+
+
+
+
+
+ const canvas2 = document.getElementById('simChart2');
+    const ctx2 = canvas2.getContext('2d');
+
+ 
+
+
+
+    window.myChart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'Liquid SHM Validator',
+            data: shmsupDataset,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 1,
+            yAxisID: 'y-totalLidquid'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        aspectRatio: 1,
+        plugins: {
+          title: {
+            display: true,
+            text: "Liquid SHM Validator"
+          },
+          legend: {
+            display: true
+          },
+          colors: {
+            enabled: true
+          }
+        },
+        scales: {
+          x: {
+            display: true,
+            type: 'linear',
+            title: {
+              display: true,
+              text: 'Days Since Genesis'
+            },
+            min: 0,
+            max: 820,
+            ticks: {
+              callback: (value, index, values) => {
+                return value.toFixed(0);
+              }
+            }
+          },
+         
+               'y-totalLidquid': {
+            display: true,
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Total Liquid Supply'
+            },
+            min: 0,
+          }
+        }
+      }
+    });
+
+
+const canvas3 = document.getElementById('simChart3');
+    const ctx3 = canvas3.getContext('2d');
+
+ 
+
+
+
+    window.myChart3 = new Chart(ctx3, {
+      type: 'line',
+      data: {
+        datasets: [
+           {
+            label: 'Total Liquid SHM',
+            data: totalLiquidDataset,
+            borderColor: 'rgb(132, 99, 255)',
+            tension: 1,
+            yAxisID: 'y-totalLidquid'
+          },
           {
             label: 'Tx Volume',
             data: txvolDataset,
@@ -190,13 +433,7 @@ export default class Simulations extends React.Component {
             borderColor: 'rgb(200, 99, 200)',
             tension: 1,
             yAxisID: 'y-active'
-          }, {
-            label: 'Supply Data',
-            data: shmsupDataset,
-            borderColor: 'rgb(132, 99, 255)',
-            tension: 1,
-            yAxisID: 'y-shmsup'
-          }
+          },
         ]
       },
       options: {
@@ -206,7 +443,7 @@ export default class Simulations extends React.Component {
         plugins: {
           title: {
             display: true,
-            text: "Node Reward Simulation"
+            text: "Total Liquid SHM"
           },
           legend: {
             display: true
@@ -224,14 +461,25 @@ export default class Simulations extends React.Component {
               text: 'Days Since Genesis'
             },
             min: 0,
-            max: minData ,
+            max: 820,
             ticks: {
               callback: (value, index, values) => {
                 return value.toFixed(0);
               }
             }
           },
-          'y-price': {
+          
+               'y-totalLidquid': {
+            display: true,
+            type: 'linear',
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Total Liquid Supply'
+            },
+            min: 0
+          },
+             'y-price': {
             display: false
           },
           'y-txvol': {
@@ -242,12 +490,11 @@ export default class Simulations extends React.Component {
               display: true,
               text: 'Tx Volume'
             },
-            min: 0,
-            max: Math.max(...txvolData)
+         
           },
 
           'y-shmsup': {
-            display: true,
+            display: false,
             type: 'linear',
             position: 'left',
             title: {
@@ -264,19 +511,21 @@ export default class Simulations extends React.Component {
               display: true,
               text: 'Active Nodes'
             },
-            min: Math.min.apply(null, activeDataset.map(function(a) {
-              return a.y;
-            })),
-            max: Math.max.apply(null, activeDataset.map(function(a) {
-              return a.y;
-            })),
-            grid: {
-              drawOnChartArea: false
-            }
+          
           }
         }
       }
     });
+
+
+
+
+
+
+
+
+
+
     document.querySelector(".paramChange").classList.remove('FileShown');
   };
 
@@ -349,6 +598,7 @@ export default class Simulations extends React.Component {
     } else if (document.querySelector(".FileSelect").value === "Matic") {
 
       getFile(PolygonPrice).then(content => {
+        console.log(content)
         // Using split method and passing "\n" as parameter for splitting
         let lines = content.trim().split("\n");
         this.setState({
@@ -506,6 +756,29 @@ export default class Simulations extends React.Component {
     document.querySelector(".paramChange").classList.add('FileShown');
 
   };
+
+    onPriceMultiplierChange = (event) => {
+    this.setState({
+      priceMultiplier: event.target.value
+    }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
+  };
+
+      onTransactionMultiplierChange = (event) => {
+    this.setState({
+      transactionMultiplier: event.target.value
+    }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
+  };
+
+
+      onAcuisitionMultiplierChange = (event) => {
+    this.setState({
+      acquisitionMultiplier: event.target.value
+    }, () => this.updateMonitoring());
+    document.querySelector(".paramChange").classList.add('FileShown');
+  };
+
 
   updateMonitoring = (event) => {
     if (this.state.CustomTXChecked === true) {
@@ -682,11 +955,17 @@ export default class Simulations extends React.Component {
 
   }
 
+
+
+
+
+  
+
   render() {
 
     return (<>
 
-      <h2 className="text-lg font-bold">Node Reward Simulations</h2>
+      <h2 className="text-lg font-bold">Network Security Simulations</h2>
 
       <div className="flex flex-wrap pt-5" >
 
@@ -720,8 +999,31 @@ export default class Simulations extends React.Component {
 
         <label className="label" htmlFor="priceFile"></label>
         <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="priceFile" name="priceFile" accept=".txt" onChange={this.onPriceFileChange}/>
+          </div>
 
-      </div>
+               <div className="form-control min-h-200">
+          <label className="label">
+            <span className="label-text">Price Multiplier</span>
+          </label>
+          <div className="tooltip" data-tip="Use this option to multiply or divide the price data (set to 1 for default data)">
+            <label className="input-group">
+              <input type="text" value={this.state.priceMultiplier} className="input input-bordered" onChange={this.onPriceMultiplierChange}/>
+              <span>Multi</span>
+            </label>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
     </div>
 
@@ -746,11 +1048,27 @@ export default class Simulations extends React.Component {
             <input type="checkbox" checked={this.state.CustomTXFileChecked} className="checkbox checkbox-secondary" onChange={this.onCustomTXFileCheckedChange}/>
 
           </label>
+
         </div>
+
+
+
         <label className="label" htmlFor="txvolData"></label>
         <input type="file" className="file-input file-input-bordered w-full max-w-xs FileHidden" id="txvolData" name="txvolData" accept=".txt" onChange={this.onTxFileChange}/>
 
       </div>
+
+          <div className="form-control min-h-200">
+          <label className="label">
+            <span className="label-text">Transaction Multiplier</span>
+          </label>
+          <div className="tooltip" data-tip="Use this option to multiply or divide the transaction data (set to 1 for default data)">
+            <label className="input-group">
+              <input type="text" value={this.state.transactionMultiplier} className="input input-bordered" onChange={this.onTransactionMultiplierChange}/>
+              <span>Multi</span>
+            </label>
+          </div>
+        </div>
 
       <button className="btn mt-5" onClick={this.onDrawChart}>Run Simulation</button>
       <div className="label-text customLabel pt-5 paramChange FileHidden ">*Parameters updated please re-run simulation</div>
@@ -765,71 +1083,253 @@ export default class Simulations extends React.Component {
       <div className="chartCard">
         <div className="chartBox">
           <button className="btn secondary hidden sm:block " onClick={this.onToggleChart}>Toggle View</button>
+
+
           <div className="flex-1 min-w-full apr-stats items-center">
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Revenue/day</div>
+                <div className="stat-title">Total Liquid SHM</div>
                 <div className="stat-value">
-                  {"$" + this.state.RevenuePerDay.toFixed(2)}
+                  {this.getNumber(this.state.totalLiquidSHM[this.state.Day - 1])}
                 </div>
                 <div className="stat-desc">
-                  Node reward * 24 / Standby ratio
+                  Biz Liquid SHM + Val Liquid SHM
                 </div>
               </div>
             </div>
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Expense/day</div>
+                <div className="stat-title">Market Cap</div>
                 <div className="stat-value">
-                  {"$" + this.state.ExpensePerDay.toFixed(2)}
+                  {"$" + this.getNumber(this.state.totalLiquidSHM[this.state.Day - 1] * this.state.SHMPricePerDay[this.state.Day - 1])}
                 </div>
                 <div className="stat-desc">
-                  Expense $/day
+                  Total Liquid SHM * SHM Price
                 </div>
               </div>
             </div>
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Income/day</div>
+                <div className="stat-title">Total Value Locked</div>
                 <div className="stat-value">
-                  {"$" + this.state.IncomePerDay.toFixed(2)}
+                  {"$" + this.getNumber(((this.state.ActiveNodesPerDay[this.state.Day - 1] * this.state.StandbyRatio) + this.state.ActiveNodesPerDay[this.state.Day - 1]) * this.state.Stake)}
+
+               
                 </div>
                 <div className="stat-desc">
-                  Income = Revenue - Expense
+                  Stake * Total Nodes
                 </div>
               </div>
             </div>
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">APY/year</div>
+                <div className="stat-title">Staking Ratio</div>
                 <div className="stat-value">
-                  {this.state.APYPerYear.toFixed(0) + "%"}
+                  {((((this.state.ActiveNodesPerDay[this.state.Day - 1] * this.state.StandbyRatio) + this.state.ActiveNodesPerDay[this.state.Day - 1]) * this.state.Stake) / (this.state.totalLiquidSHM[this.state.Day - 1] * this.state.SHMPricePerDay[this.state.Day - 1]) * 100).toFixed(2) + "%"}
                 </div>
                 <div className="stat-desc">
-                  100 * Income * 365 / Stake
+                  TVL / Market Cap
+                </div>
+              </div>
+            </div>
+
+                            <div className="form-control min-h-200">
+            <RangeSlider title={"Select Day"} id="daySelect" desc={"Select Day"} max={820} start={1} onSliderChange={this.onSliderChange}/>
+          </div>
+
+
+
+          <div className="flex-1 min-w-full apr-stats items-center">
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Day SHM Price</div>
+                <div className="stat-value">
+                  {"$" + this.getNumber(this.state.SHMPricePerDay[this.state.Day - 1]).toFixed(2)}
+                </div>
+                <div className="stat-desc">
+                  SHM Price Day(n)
                 </div>
               </div>
             </div>
 
             <div className="stats shadow">
               <div className="stat">
-                <div className="stat-title">Peak SHM Supply</div>
+                <div className="stat-title">Acquisition Price</div>
                 <div className="stat-value">
-                  {this.getNumber(this.state.MaxSHMReached)}
+                 {"$" + this.getNumber(this.state.SHMPricePerDay[this.state.Day - 1] * this.state.acquisitionMultiplier).toFixed(2)}
                 </div>
                 <div className="stat-desc">
-                  Max(all daily supply)
+                  SHM Price Day(n) * Acquisition Multi
                 </div>
               </div>
             </div>
+
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Current Network Size</div>
+                <div className="stat-value">
+                   {(((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]).toFixed(0)}
+              
+
+               
+                </div>
+                <div className="stat-desc">
+                  (Active Nodes * Standby Ratio) + Active Nodes
+                </div>
+              </div>
+            </div>
+
+                   <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">New Network Size</div>
+                <div className="stat-value">
+                  {((((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) + ((((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100 - this.state.attackThreshold) * this.state.attackThreshold / (100 / this.state.acquisitionRate))).toFixed(0)}
+                </div>
+                <div className="stat-desc">
+                  Current network size + Addtional Nodes
+                </div>
+              </div>
+            </div>
+
+            <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Addition Nodes Added</div>
+                <div className="stat-value">
+                  {((((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100 - this.state.attackThreshold) * this.state.attackThreshold / (100 / this.state.acquisitionRate)).toFixed(0)  }
+                </div>
+                <div className="stat-desc">
+                  Nodes added to total node count
+                </div>
+              </div>
+            </div>
+
+             <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Diluted Nodes Added</div>
+                <div className="stat-value">
+                  {((((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100) * this.state.attackThreshold / (100 / (100 - this.state.acquisitionRate))).toFixed(0)  }
+                </div>
+                <div className="stat-desc">
+                  Nodes diluted into the network
+                </div>
+              </div>
+            </div>
+
+                        <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Total Nodes Added</div>
+                <div className="stat-value">
+                  {((((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100) * this.state.attackThreshold / (100 / (100 - this.state.acquisitionRate)) + (((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100 - this.state.attackThreshold) * this.state.attackThreshold / (100 / this.state.acquisitionRate)).toFixed(0)  }
+                </div>
+                <div className="stat-desc">
+                  Nodes diluted into the network
+                </div>
+              </div>
+            </div>
+
+
+                             <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">SHM Required per Node</div>
+                <div className="stat-value">
+                  {(this.state.Stake / this.state.priceData[this.state.Day - 1]).toFixed(2)  }
+                </div>
+                <div className="stat-desc">
+                  (Additional Nodes + Diluted Nodes) * (Stake * Acquisition Multi)
+                </div>
+              </div>
+            </div>
+
+
+                             <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Total SHM Required</div>
+                <div className="stat-value">
+                  {this.getNumber((((((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100 - this.state.attackThreshold) * this.state.attackThreshold / (100 / this.state.acquisitionRate) + (((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100) * this.state.attackThreshold / (100 / (100 - this.state.acquisitionRate))) * (this.state.Stake / this.state.priceData[this.state.Day - 1])))  }
+                </div>
+                <div className="stat-desc">
+                  (Additional Nodes + Diluted Nodes) * (Stake * Acquisition Multi)
+                </div>
+              </div>
+            </div>
+
+                 <div className="stats shadow">
+              <div className="stat">
+                <div className="stat-title">Attack Cost</div>
+                <div className="stat-value">
+                  { "$" + this.getNumber((((((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100 - this.state.attackThreshold) * this.state.attackThreshold / (100 / this.state.acquisitionRate) + (((this.state.ActiveNodesPerDay[this.state.Day - 1]) * (this.state.StandbyRatio)) + this.state.ActiveNodesPerDay[this.state.Day - 1]) / (100) * this.state.attackThreshold / (100 / (100 - this.state.acquisitionRate))) * (this.state.Stake * this.state.acquisitionMultiplier)))  }
+                </div>
+                <div className="stat-desc">
+                  (Additional Nodes + Diluted Nodes) * (Stake * Acquisition Multi)
+                </div>
+              </div>
+            </div>
+
+
+                            <div className="form-control min-h-200">
+            <RangeSlider title={"Acquisition Rate"} id="acqusitionRate" desc={"Rate"} max={100} start={50} onSliderChange={this.onAcqusitionSliderChange}/>
+
+            <RangeSlider title={"Attack Threshold"} id="attackThreshold" desc={"Rate"} max={100} start={66} onSliderChange={this.onAttackSliderChange}/>
+
+
+         
+                <div className="form-control min-h-200">
+          <label className="label">
+            <span className="label-text">Acquisition Price Multiplier</span>
+          </label>
+          <div className="tooltip" data-tip="Use this option to multiply or divide the acquisition price (set to 1 for default price)">
+            <label className="input-group">
+              <input type="text" value={this.state.acquisitionMultiplier} className="input input-bordered" onChange={this.onAcuisitionMultiplierChange}/>
+              <span>Multi</span>
+            </label>
+          </div>
+        </div>
+
+          </div>
+
+
+          </div>
+
+
+
+
+
+
+
+
+
+           
           </div>
           <div className="holder">
             <span id="info"/>
-            <canvas id="simChart"/>
+            <div class="flex ...">
+  <div class="w-1/2">    <canvas id="simChart"/></div>
+  <div class="w-1/2">  <canvas id="simChart2"/></div>
+</div>
+
+      
+             
+        
+
           </div>
+
+                    <div className="holder">
+                   
+            <span id="info"/>
+
+         
+             <canvas id="simChart3"/>
+
+
+
+
+
+          </div>
+
+
           <button className="btn secondary" onClick={this.onDownloadPDF}>Download PDF</button>
         </div>
       </div>
@@ -851,7 +1351,7 @@ export default class Simulations extends React.Component {
           </label>
           <div className="tooltip" data-tip="Determines security and redundancy of the network">
             <label className="input-group">
-              <input type="text" value={this.state.NodesPerShard} className="input input-bordered"  onChange={this.onNodesPerShardChange}/>
+              <input type="text" value={this.state.NodesPerShard} className="input input-bordered" disabled="disabled"  onChange={this.onNodesPerShardChange}/>
               <span>Nodes</span>
             </label>
           </div>
@@ -863,7 +1363,7 @@ export default class Simulations extends React.Component {
           </label>
           <div className="tooltip" data-tip="This is the minimum number of nodes the network must have regardless of how low the TPS is. This is needed in order to maintain a certain level of decentralization.">
             <label className="input-group">
-              <input type="text" value={this.state.MinNodes} className="input input-bordered"  onChange={this.onMinNodesChange}/>
+              <input type="text" value={this.state.MinNodes} className="input input-bordered" disabled="disabled"  onChange={this.onMinNodesChange}/>
               <span>Nodes</span>
             </label>
           </div>
@@ -910,34 +1410,13 @@ export default class Simulations extends React.Component {
         </div>
       </div>
 
-      <div className="form-control min-h-200">
-        <label className="label">
-          <span className="label-text">Stable Price $/SHM</span>
-        </label>
-        <div className="tooltip" data-tip="Same as SHM price, but set by FDAO into network. Updated about once a day. Used by the network to determine the SHM amount for target Tx Fee, Node reward and Stake amount.">
-          <label className="input-group">
-            <input type="text" value={this.state.SHMValue} className="input input-bordered" disabled="disabled" onChange={this.onStabilityFactorChange}/>
 
-          </label>
-        </div>
-      </div>
 
     </div>
 
     <div className="flex flex-col min-w-[50%] apr-stats">
       <h2 className="pt-10">FDAO Monitoring</h2>
-      <div className="form-control min-h-200">
-        <label className="label">
-          <span className="label-text">SHM Price $</span>
-        </label>
-        <div className="tooltip" data-tip="FDAO uses this to set the Stability Factor. Stability factor changed about once a day.">
-          <label className="input-group">
-            <input type="text" value={this.state.SHMValue} className="input input-bordered" disabled="disabled" onChange={this.onSHMValueChange}/>
-            <span>USD</span>
-          </label>
-        </div>
 
-      </div>
 
       <div className="form-control min-h-200">
         <label className="label">
@@ -1000,22 +1479,7 @@ If Standby ratio < 1 then set it to 1
         </div>
       </div>
 
-      <div className="form-control min-h-200">
-        <label className="label">
-          <span className="label-text">Server Rent $/hr</span>
-        </label>
-        <div className="tooltip" data-tip="On Linode.com $0.20/hr gets
-8 core
-16 GB RAM
-320 GB SSD
-6 TB/mo transfer
-40 Gbs download / 6 Gbs upload">
-          <label className="input-group">
-            <input type="text" value={this.state.SeverRentPerHour} className="input input-bordered" onChange={this.onSeverRentPerHourChange}/>
-            <span>USD</span>
-          </label>
-        </div>
-      </div>
+     
 
       <div className="form-control min-h-200">
         <label className="label">

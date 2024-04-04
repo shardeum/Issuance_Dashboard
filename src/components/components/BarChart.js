@@ -2,15 +2,18 @@
 import React from "react";
 import { Bar } from "react-chartjs-2";
 
-function BarChart({ chartData }) {
+
+
+function BarChart({ chartData, plugins }) {
   return (
     <div className="chart-container">
       <Bar
         data={chartData}
+          plugins={plugins}
         options={{
           aspectRatio: 1,
           scales: {
-        
+
             y: {
               title: {
                 color: 'White',
@@ -23,6 +26,23 @@ function BarChart({ chartData }) {
             }
           },
           plugins: {
+
+            datalabels: {
+              formatter: (value, context) => {
+                if(value === 259080000) {
+                  return "Max Available"
+                }
+                  else {
+                    return ""
+                  }
+
+              },
+              rotation: 90,
+              color: "white"
+            },
+
+
+
             title: {
               display: true,
               text: "SHM Token Distribution"

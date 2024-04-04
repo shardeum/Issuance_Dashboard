@@ -6,18 +6,38 @@ import Apr from './pages/Apr';
 import Emissions from './pages/Emissions';
 import Simulations from './pages/Simulations';
 import Parameters from './pages/Parameters';
-
+import Security from './pages/Security';
 import DrawerLayout from "./components/DrawerLayout";
+import TagManager from 'react-gtm-module'
+
+const tagManagerArgs = {
+    gtmId: 'GTM-N6NTB5C',
+}
+
+TagManager.initialize(tagManagerArgs)
+
 
 export default function Layout({children}) {
   return (
     <HelmetProvider>
-    <Router>
-      <Helmet>
-        <title>Shardeum Issuance</title>
-        <meta name="description" content="Shardeum Issuance"/>
-        <link rel="icon" href="/favicon.ico"/>
-      </Helmet>
+    <Router basename="/">
+      {/* <Helmet>
+        <title>SHM Tokenomics | Calculate Your Validator Earnings</title>
+        <meta name="description" content="Shardeum SHM issuance (initial release) is live which will allow validators to run node reward simulations and calculate the node income. Check it out today"/>
+        <meta property="og:url" content="https://issuance-dashboard.vercel.app/shm-tokenomics"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="SHM Tokenomics | Calculate Your Validator Earnings"/>
+        <meta property="og:description" content="Shardeum SHM issuance (initial release) is live which will allow validators to run node reward simulations and calculate the node income. Check it out today"/>
+        <meta property="og:image" content="https://shardeum.org/blog/wp-content/uploads/2023/04/SHM-tokenomics-min.jpg"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta property="twitter:domain" content="shardeum.org"/>
+        <meta property="twitter:url" content="https://issuance-dashboard.vercel.app/shm-tokenomics"/>
+        <meta name="twitter:title" content="SHM Tokenomics | Calculate Your Validator Earnings"/>
+        <meta name="twitter:description" content="Shardeum SHM issuance (initial release) is live which will allow validators to run node reward simulations and calculate the node income. Check it out today"/>
+        <meta name="twitter:image" content="https://shardeum.org/blog/wp-content/uploads/2023/04/SHM-tokenomics-min.jpg" />
+        <link rel="canonical" href="https://issuance-dashboard.vercel.app/shm-tokenomics" />
+
+      </Helmet> */}
       <main className="main py-5 px-5 md:px-20 ml-auto mr-auto  md:max-w-[75rem]">
         <DrawerLayout/>
 
@@ -27,6 +47,7 @@ export default function Layout({children}) {
               <Route path='/Apy' element={<Apr/>}/>
               <Route path='/Parameters' element={<Parameters/>}/>
               <Route path='/Simulations' element={<Simulations/>}/>
+              <Route path='/Security' element={<Security/>}/>
           </Routes>
         {/* Dynamic content */}
         <div>

@@ -7,7 +7,7 @@ export default function RangeSlider(props) {
   return (
 
     <>
-    <div className="form-control min-h-200">
+    <div className="form-control min-h-200 pt-5">
     <label className="label">
       <span className="label-text">{props.title}</span>
     </label>
@@ -18,10 +18,9 @@ export default function RangeSlider(props) {
         min="1"
         max={props.max}
         onChange={(e) => { props.onSliderChange(e); setValue(e.target.value)}}
-
         value={value}
       />
-      <span>{props.desc} {value}</span>
+    <span className="pl-2">{props.desc} {value}</span>
     </div>
   </div>
 
