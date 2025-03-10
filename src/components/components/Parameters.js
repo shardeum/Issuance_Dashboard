@@ -212,7 +212,7 @@ export default class AprCalc extends React.Component {
   };
 
   render() {
-    return (<> 
+    return ( 
 
      
 
@@ -247,47 +247,47 @@ export default class AprCalc extends React.Component {
       </div>
     </div>
     <div className="flex flex-col w-50 min-w-[50%]">
-      <h2>FDAO Controls</h2>
+      <h2>Inputs</h2>
 
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">Tx Fee $</span>
+          <span className="label-text">Tx Fee </span>
         </label>
         <div className="tooltip" data-tip="This is the target fee for a token transfer transaction. SHM transfer will be less; AMM txs will be more.">
           <label className="input-group">
             <input type="text" value={this.state.TXfees} className="input input-bordered" onChange={this.onTXfeesChange}/>
-            <span>USD</span>
+            <span></span>
           </label>
         </div>
       </div>
 
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">Node Reward $/hr</span>
+          <span className="label-text">Node Reward /hr</span>
         </label>
         <div className="tooltip" data-tip="This defines how much each active node in the network receives as dollars per hour. Although it is specified in $ it is paid out in SHM.">
           <label className="input-group">
             <input type="text" value={this.state.NodeRewardPerHour} className="input input-bordered" onChange={this.onNodeRewardPerHourChange}/>
-            <span>USD</span>
+            <span></span>
           </label>
         </div>
       </div>
 
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">Stake Amount $</span>
+          <span className="label-text">Stake Amount </span>
         </label>
         <div className="tooltip" data-tip="The amount of SHM a node must stake in order to join the network. Specified in $ but staked in SHM based on price set by Stability factor. Some or all of the stake can be lost if node misbehaves or falls behind in processing. This ensures that operators run nodes on good hardware.">
           <label className="input-group">
             <input type="text" value={this.state.Stake} className="input input-bordered" onChange={this.onStakeChange}/>
-            <span>USD</span>
+            <span></span>
           </label>
         </div>
       </div>
 
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">Stable Price $/SHM</span>
+          <span className="label-text"> Price</span>
         </label>
         <div className="tooltip" data-tip="Same as SHM price, but set by FDAO into network. Updated about once a day. Used by the network to determine the SHM amount for target Tx Fee, Node reward and Stake amount.">
           <label className="input-group">
@@ -300,15 +300,15 @@ export default class AprCalc extends React.Component {
     </div>
 
     <div className="flex flex-col w-50 min-w-[50%] apr-stats">
-      <h2 className="pt-10">FDAO Monitoring</h2>
+      <h2 className="pt-10"></h2>
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">SHM Price $</span>
+          <span className="label-text">SHM Per Unit</span>
         </label>
         <div className="tooltip" data-tip="FDAO uses this to set the Stability Factor. Stability factor changed about once a day.">
           <label className="input-group">
             <input type="text" value={this.state.SHMValue} className="input input-bordered" onChange={this.onSHMValueChange}/>
-            <span>USD</span>
+            <span>SHM</span>
           </label>
         </div>
 
@@ -316,12 +316,12 @@ export default class AprCalc extends React.Component {
 
       <div className="form-control min-h-200">
         <label className="label">
-          <span className="label-text">Average Tx Fee $</span>
+          <span className="label-text">Average Tx Fee </span>
         </label>
         <div className="tooltip" data-tip="This is the actual average tx fees on the network. Typically will be more than the target Tx Fee set by FDAO. Maybe about 2x the target Tx Fee.">
           <label className="input-group">
             <input type="text" value={this.state.AvgTxFee} className="input input-bordered" disabled={this.state.CustomDisabled} onChange={this.onAvgTxFeeChange}/>
-            <span>USD</span>
+            <span>SHM</span>
 
           </label>
           <div className="form-control">
@@ -363,7 +363,7 @@ export default class AprCalc extends React.Component {
     </div>
 
     <div className="flex flex-col w-50 min-w-[50%] apr-stats">
-      <h2 className="pt-10">Continued...</h2>
+      <h2 className="pt-10"></h2>
 
       <div className="form-control min-h-200">
         <label className="label">
@@ -449,7 +449,7 @@ SHM Supply = SHM Supply - SHM Delta">
         <div className="stat">
           <div className="stat-title">Revenue/day</div>
           <div className="stat-value">
-            {"$" + this.state.RevenuePerDay.toFixed(2)}
+            { this.state.RevenuePerDay.toFixed(2)}
           </div>
           <div className="stat-desc">
             Node reward * 24 / Standby ratio
@@ -461,7 +461,7 @@ SHM Supply = SHM Supply - SHM Delta">
         <div className="stat">
           <div className="stat-title">Expense/day</div>
           <div className="stat-value">
-            {"$" + this.state.ExpensePerDay.toFixed(2)}
+            {this.state.ExpensePerDay.toFixed(2)}
           </div>
           <div className="stat-desc">
             Expense $/day
@@ -473,7 +473,7 @@ SHM Supply = SHM Supply - SHM Delta">
         <div className="stat">
           <div className="stat-title">Income/day</div>
           <div className="stat-value">
-            {"$" + this.state.IncomePerDay.toFixed(2)}
+            { this.state.IncomePerDay.toFixed(2)}
           </div>
           <div className="stat-desc">
             Income = Revenue - Expense
@@ -501,7 +501,7 @@ SHM Supply = SHM Supply - SHM Delta">
         <div className="stat">
           <div className="stat-title">Revenue/day</div>
           <div className="stat-value">
-            {"$" + this.state.NetworkRevenuePerDay.toFixed(0)}
+            {this.state.NetworkRevenuePerDay.toFixed(0)}
           </div>
           <div className="stat-desc">
             Daily tx volume * Tx fee
@@ -513,7 +513,7 @@ SHM Supply = SHM Supply - SHM Delta">
         <div className="stat">
           <div className="stat-title">Expense/day</div>
           <div className="stat-value">
-            {"$" + this.state.NetworkExpensePerDay.toFixed(0)}
+            {this.state.NetworkExpensePerDay.toFixed(0)}
           </div>
           <div className="stat-desc">
             Active nodes * Node reward * 24
@@ -525,7 +525,7 @@ SHM Supply = SHM Supply - SHM Delta">
         <div className="stat">
           <div className="stat-title">Income/day</div>
           <div className="stat-value">
-            {"$" + this.state.NetworkIncomePerDay.toFixed(0)}
+            {this.state.NetworkIncomePerDay.toFixed(0)}
           </div>
           <div className="stat-desc">
             Income = Revenue - Expense
@@ -547,6 +547,7 @@ SHM Supply = SHM Supply - SHM Delta">
 
     </div>
 
-    < /div></ >);
+        </div>
+        );
   }
 }

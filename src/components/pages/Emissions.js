@@ -70,7 +70,7 @@ export default function Emissions() {
 
   return (<div className="App pt-5 sm:pt-0">
     <h2 className="text-lg font-bold">Shardeum Distribution</h2>
-    <p className="pt-5">49% of the SHM supply (248,920,000 SHM) will be given to the Foundation, Ecosystem & Airdrops, Team, and Sale accounts at genesis. The remaining 51% will be available as node reward, however since transaction fees are burned the maximum SHM supply of 508 million will never be reached.</p>
+    <p className="pt-5">248,920,000 SHM will be given to the Foundation, Ecosystem & Airdrops, Team, and Sale accounts at genesis. </p>
     <p className="py-5">The below graphs show SHM distribution at a token (graph 1) and percentage (graph 2) level.</p>
 
     <div className="flex-1 flex-col sm:flex sm:flex-row">
@@ -80,16 +80,15 @@ export default function Emissions() {
     <h2 className="text-lg font-bold pt-10">Shardeum Emissions</h2>
 
     <p className="py-5 font-bold">The following accounts will receive SHM immediately at genesis / mainnet launch:</p>
-    <li>Foundation account 11% of 508M; 55.88M SHM; becomes available at mainnet launch</li>
-    <li>Ecosystem & Airdrops account 5% of 508M; 25.4M SHM; becomes available at mainnet launch</li>
+    <li>Foundation account 22.44% of 249M; 55.88M SHM; becomes available at mainnet launch</li>
+    <li>Ecosystem & Airdrops account 10.23% of 249M; 25.48M SHM; becomes available at mainnet launch</li>
     <p className="py-5 font-bold ">The following accounts will start receiving SHM 3 months (90 days) after the mainnet launch in 730 daily installments:</p>
-    <li>Team account 15% of 508M; 76.2M SHM; about 104,383 SHM per day after 90 days</li>
-    <li>Sale account 18% of 508M; 91.44M SHM; about 125,260 SHM per day after 90 days</li>
-    <p className="py-5">The remaining 51% is set aside for node rewards; these coins get created when given starting at mainnet launch based on the node reward setting we chose. (see parameters and simulation tabs)</p>
+    <li>Team account 30.6% of 249M; 76.2M SHM; about 104,383 SHM per day after 90 days</li>
+    <li>Sale account 36.72% of 249M; 91.44M SHM; about 125,260 SHM per day after 90 days</li>
+    
     <LineChart chartData={chartData}/>
 
     <p className="py-5">The graph above shows the liquid supply of SHM in the 820 days after network genesis, this encompasses the entire vesting period of the Team and Sale SHM.
-      <span className="font-bold ">This does not include the 51% of SHM supply that will be used for node reward.</span>
     </p>
   </div>);
 }
