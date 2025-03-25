@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b2b54344.css",
+    "main.js": "/static/js/main.8b86a519.js",
+    "static/js/498.672166b5.chunk.js": "/static/js/498.672166b5.chunk.js",
+    "static/js/703.87a633d9.chunk.js": "/static/js/703.87a633d9.chunk.js",
+    "static/js/513.d8be9b46.chunk.js": "/static/js/513.d8be9b46.chunk.js",
+    "static/js/787.37b8b659.chunk.js": "/static/js/787.37b8b659.chunk.js",
+    "static/media/eth-price.txt": "/static/media/eth-price.39c9693be5c8054bff69.txt",
+    "static/media/bnb-price.txt": "/static/media/bnb-price.0a57f66249952561467c.txt",
+    "static/media/matic-price.txt": "/static/media/matic-price.1d8f77177ea916f79f7f.txt",
+    "static/media/eth-tx-vol.txt": "/static/media/eth-tx-vol.bb9ad1471b5089956138.txt",
+    "static/media/algo-price.txt": "/static/media/algo-price.52e8257be2421aa81055.txt",
+    "static/media/algo-tx-vol.txt": "/static/media/algo-tx-vol.c9b41e5579ee24011588.txt",
+    "static/media/poly-tx-vol.txt": "/static/media/poly-tx-vol.8c1f1456519498da1b16.txt",
+    "static/media/bsc-tx-vol.txt": "/static/media/bsc-tx-vol.017a08c5f03fe91dad6d.txt",
+    "index.html": "/index.html",
+    "main.b2b54344.css.map": "/static/css/main.b2b54344.css.map",
+    "main.8b86a519.js.map": "/static/js/main.8b86a519.js.map",
+    "498.672166b5.chunk.js.map": "/static/js/498.672166b5.chunk.js.map",
+    "703.87a633d9.chunk.js.map": "/static/js/703.87a633d9.chunk.js.map",
+    "513.d8be9b46.chunk.js.map": "/static/js/513.d8be9b46.chunk.js.map",
+    "787.37b8b659.chunk.js.map": "/static/js/787.37b8b659.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b2b54344.css",
+    "static/js/main.8b86a519.js"
+  ]
+}
